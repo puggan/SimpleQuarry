@@ -194,7 +194,7 @@ public class TilePoweredQuarry
 	public CompoundTag writeNBT(CompoundTag nbt)
 	{
 		nbt = super.writeNBT(nbt);
-		nbt.put("AdditionalTags", additionalTags);
+		nbt.put("AdditionalTags", additionalTags.copy());
 		return nbt;
 	}
 

@@ -12,6 +12,7 @@ public class SQConfig
 	private static int fQuarryTickRate, pQuarryTickRate;
 	private static boolean poweredQuarry, easyPowerQuarryRecipe;
 	private static float feConversion, heConversion;
+	private static boolean particleVortex;
 
 	public static void reload()
 	{
@@ -37,12 +38,22 @@ public class SQConfig
 				}
 			}
 
+			ConfigEntryCategory clientside = cfg.getCategory("Clientside").setDescription("Client-side features of the mod");
+			{
+				particleVortex = clientside.getBooleanEntry("Particle Vortex", true).setDescription("Should quarry suck particles in?").getValue();
+			}
+
 			if(cfg.hasChanged())
 				cfg.save();
 		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean enableParticleVortex()
+	{
+		return particleVortex;
 	}
 
 	public static float getFeConversion()

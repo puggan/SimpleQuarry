@@ -15,6 +15,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.zeith.squarry.SQCommonProxy;
 import org.zeith.squarry.SQConfig;
 import org.zeith.squarry.api.energy.UniversalConverter;
+import org.zeith.squarry.api.particle.ClientQuarryVortex;
+import org.zeith.squarry.api.particle.ParticleVortex;
 import org.zeith.squarry.blocks.entity.TileFuelQuarry;
 import org.zeith.squarry.client.screen.ScreenFilter;
 import org.zeith.squarry.inventory.ContainerFilter;
@@ -33,6 +35,12 @@ public class SQClientProxy
 	private void clientSetup(FMLClientSetupEvent e)
 	{
 		MenuScreens.register(ContainerFilter.FILTER, ScreenFilter::new);
+	}
+
+	@Override
+	public ParticleVortex createQuarryVortex(TileFuelQuarry quarry)
+	{
+		return new ClientQuarryVortex(quarry);
 	}
 
 	private void tooltip(ItemTooltipEvent e)

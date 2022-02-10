@@ -2,7 +2,7 @@
 mod_id=squarry
 archive_name=SimpleQuarry
 mod_name=Simple Quarry
-mod_version=18.1.3
+mod_version=18.1.4
 
 # Maven Info
 maven_group=org.zeith.SimpleQuarry

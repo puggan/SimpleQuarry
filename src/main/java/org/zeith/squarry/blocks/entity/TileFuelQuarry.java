@@ -45,9 +45,11 @@ import org.zeith.hammerlib.tiles.TileSyncableTickable;
 import org.zeith.hammerlib.util.java.DirectStorage;
 import org.zeith.squarry.SQCommonProxy;
 import org.zeith.squarry.SQConfig;
+import org.zeith.squarry.SimpleQuarry;
 import org.zeith.squarry.api.ItemInjector;
 import org.zeith.squarry.api.ItemStackList;
 import org.zeith.squarry.api.energy.QFStorage;
+import org.zeith.squarry.api.particle.ParticleVortex;
 import org.zeith.squarry.blocks.BlockFuelQuarry;
 import org.zeith.squarry.init.TagsSQ;
 import org.zeith.squarry.inventory.ContainerFuelQuarry;
@@ -87,9 +89,11 @@ public class TileFuelQuarry
 	@NBTSerializable
 	public final ItemStackList queueItems = ItemStackList.createList();
 
-	private AABB boundingBox;
+	public AABB boundingBox;
 	//	private QuarryVortex vortex;
 	private ChunkPos chunkPos;
+
+	public ParticleVortex vortex;
 
 	protected double getQFCapacity()
 	{
@@ -144,9 +148,12 @@ public class TileFuelQuarry
 		{
 			if(boundingBox == null || boundingBox.minY != (double) y)
 				boundingBox = new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, worldPosition.getY(), chunkZ * 16 + 16);
-//			if(vortex == null)
-//				vortex = new QuarryVortex(this);
-//			SimpleQuarry.PROXY.addParticleVortex(vortex);
+			if(SQConfig.enableParticleVortex())
+			{
+				if(vortex == null)
+					vortex = SimpleQuarry.PROXY.createQuarryVortex(this);
+				vortex.update();
+			}
 			return;
 		}
 
@@ -225,27 +232,24 @@ public class TileFuelQuarry
 		if(y > -64 && atTickRate(tickRate) && storage.getStoredQF(null) >= QFPerBlock)
 		{
 			boolean hasBrokenBlock = false;
-			block0:
-			for(int x = 0; x < 16; ++x)
+
+			for(BlockPos pos : BlockPos.betweenClosed(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 15, y, chunkZ * 16 + 15))
 			{
-				for(int z = 0; z < 16; ++z)
-				{
-					BlockPos pos = new BlockPos(chunkX * 16 + x, y, chunkZ * 16 + z);
-					BlockState state = level.getBlockState(pos);
-					Block b = state.getBlock();
+				BlockState state = level.getBlockState(pos);
+				Block b = state.getBlock();
 
-					if(level.isEmptyBlock(pos) || !canBreak(state, pos))
-						continue;
+				if(level.isEmptyBlock(pos) || !canBreak(state, pos))
+					continue;
 
-					captureItems(makeDrops(pos, state));
-					hasBrokenBlock = true;
-					breakBlock(pos, state);
-					storage.produceQF(null, QFPerBlock, false);
-					sync();
+				captureItems(makeDrops(pos, state));
+				hasBrokenBlock = true;
+				breakBlock(pos, state);
+				storage.produceQF(null, QFPerBlock, false);
+				sync();
 
-					break block0;
-				}
+				break;
 			}
+
 			if(!hasBrokenBlock)
 				--y;
 		}
