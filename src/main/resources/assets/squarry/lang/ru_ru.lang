@@ -1,0 +1,45 @@
+﻿
+itemGroup.squarry=Simple Quarry
+
+block.squarry.fuel_quarry=Топливный карьер
+block.squarry.powered_quarry=Электрический карьер
+
+item.squarry.upgrade_base=Основа апгрейда
+item.squarry.upgrade_silk=Апгрейд. шёлковое касание
+item.squarry.upgrade_silk.tooltip0=§4Несовместимо с удачей и авто-плавкой
+item.squarry.upgrade_fortune_1=Апгрейд. Удача I
+item.squarry.upgrade_fortune_1.tooltip0=§4Несовместимо с шёлковым касанием
+item.squarry.upgrade_fortune_2=Апгрейд. Удача II
+item.squarry.upgrade_fortune_2.tooltip0=Требует предыдущий уровень удачи.
+item.squarry.upgrade_fortune_2.tooltip1=§4Несовместимо с шёлковым касанием
+item.squarry.upgrade_fortune_3=Апгрейд. Удача III
+item.squarry.upgrade_fortune_3.tooltip0=Требует предыдущий уровень удачи.
+item.squarry.upgrade_fortune_3.tooltip1=§4Несовместимо с шёлковым касанием
+item.squarry.upgrade_efficiency_1=Апгрейд. Эффективность I
+item.squarry.upgrade_efficiency_2=Апгрейд. Эффективность II
+item.squarry.upgrade_efficiency_2.tooltip0=Требует предыдущий уровень эффективности.
+item.squarry.upgrade_efficiency_3=Апгрейд. Эффективность III
+item.squarry.upgrade_efficiency_3.tooltip0=Требует предыдущий уровень эффективности.
+item.squarry.upgrade_filler=Апгрейд. Заполнение
+item.squarry.upgrade_filler.tooltip0=Заполняет область карьера каменистой землей
+item.squarry.upgrade_filler.tooltip1=после того, как карьер закончил добычу.
+item.squarry.upgrade_filter=Апгрейд. фильтр
+item.squarry.upgrade_filter.tooltip0=Имеет интерфейс; Позволяет указать, что
+item.squarry.upgrade_filter.tooltip1=должен подбирать карьер.
+
+item.squarry.upgrade_unification=Апгрейд. объединение
+item.squarry.upgrade_unification.tooltip0=Имеет интерфейс; Позволяет конвертировать
+item.squarry.upgrade_unification.tooltip1=руды в единый вариант.
+
+info.squarry.fuel_use_boost=Затраты топлива: x%.02f
+info.squarry.qfuel_use_boost=Затраты топлива:
+info.squarry.filter.whitelist=Собирать
+info.squarry.filter.blacklist=Не собирать
+info.squarry.filter.oredict.yes=Учитывать словарь руд
+info.squarry.filter.oredict.no=Игнорировать словарь руд
+info.squarry.filter.meta.yes=Учитывать урон
+info.squarry.filter.meta.no=Игнорировать урон
+
+info.squarry.blockstobreak=блоков может сломать
+info.squarry.blocks_broken=Может сломать блоков
+info.squarry.not_fuel=Не топливо!

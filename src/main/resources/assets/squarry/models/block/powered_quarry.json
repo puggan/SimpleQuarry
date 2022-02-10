@@ -1,0 +1,9 @@
+{
+    "parent": "squarry:block/orientable_differs",
+    "textures": {
+        "front": "squarry:block/powered_quarry_front",
+        "side": "squarry:block/powered_quarry_side",
+        "top": "squarry:block/powered_quarry_top",
+        "bottom": "squarry:block/powered_quarry_top"
+    }
+}

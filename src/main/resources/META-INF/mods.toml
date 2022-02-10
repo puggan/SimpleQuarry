@@ -1,0 +1,34 @@
+modLoader="javafml"
+loaderVersion="[39,)"
+issueTrackerURL="https://gitlab.com/DragonForge/SimpleQuarry/issues"
+license="All rights reserved"
+[[mods]]
+modId="squarry"
+version="${file.jarVersion}"
+displayName="Simple Quarry"
+updateJSONURL="http://dccg.herokuapp.com/api/fmluc/247393"
+displayURL="http://dccg.herokuapp.com/api/fmlhp/247393"
+logoFile="examplemod.png" #optional
+authors="Zeitheron" #optional
+description='''
+Multi-line description
+of the mod!
+'''
+[[dependencies.squarry]]
+    modId="forge"
+    mandatory=true
+    versionRange="[39,)"
+    ordering="NONE" # NONE/BEFORE/AFTER
+    side="BOTH"
+[[dependencies.squarry]]
+    modId="minecraft"
+    mandatory=true
+    versionRange = "[1.18,1.19)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.squarry]]
+    modId="hammerlib"
+    mandatory=true
+    versionRange = "[18.1.6,)"
+    ordering="NONE"
+    side="BOTH"

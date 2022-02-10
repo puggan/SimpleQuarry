@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "enabled=true,facing=north": { "model": "squarry:block/powered_quarry" },
+        "enabled=true,facing=south": { "model": "squarry:block/powered_quarry", "y": 180 },
+        "enabled=true,facing=west":  { "model": "squarry:block/powered_quarry", "y": 270 },
+        "enabled=true,facing=east":  { "model": "squarry:block/powered_quarry", "y": 90 },
+        "enabled=false,facing=north": { "model": "squarry:block/powered_quarry_done" },
+        "enabled=false,facing=south": { "model": "squarry:block/powered_quarry_done", "y": 180 },
+        "enabled=false,facing=west":  { "model": "squarry:block/powered_quarry_done", "y": 270 },
+        "enabled=false,facing=east":  { "model": "squarry:block/powered_quarry_done", "y": 90 }
+    }
+}

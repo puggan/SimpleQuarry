@@ -1,0 +1,9 @@
+{
+    "parent": "squarry:block/orientable_differs",
+    "textures": {
+        "front": "squarry:block/fuel_quarry_front",
+        "side": "squarry:block/fuel_quarry_side",
+        "top": "squarry:block/fuel_quarry_top",
+        "bottom": "squarry:block/fuel_quarry_top"
+    }
+}
