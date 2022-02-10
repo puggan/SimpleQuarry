@@ -55,11 +55,9 @@ public class ScreenPoweredQuarry
 		float power = (float) (tile.storage.getStoredQF(null) / tile.storage.getQFCapacity(null) * 64);
 		int finalCol = ColorHelper.interpolate(0xFF803400, 0xFFFE6A00, power / 64F);
 
-		RenderSystem.disableTexture();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderUtils.drawGradientRect(leftPos + 7, topPos + 72 - power, 11, power, finalCol, 0xFF803400);
-		RenderSystem.enableTexture();
 	}
 
 	private static final DecimalFormat df = new DecimalFormat("#0");
@@ -69,9 +67,10 @@ public class ScreenPoweredQuarry
 	{
 		if(mx - leftPos >= 6 && my - topPos >= 7 && mx - leftPos <= 19 && my - topPos <= 73)
 		{
-			RenderSystem.disableTexture();
-			RenderUtils.drawColoredModalRect(matrix, leftPos + 7, topPos + 8, 11, 64, 0x80FFFFFF);
-			RenderSystem.enableTexture();
+			RenderSystem.enableBlend();
+			RenderSystem.setShader(GameRenderer::getPositionColorShader);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderUtils.drawColoredModalRect(matrix, 7, 8, 11, 64, 0x80FFFFFF);
 
 			ItemStack mouse = menu.getCarried();
 			if(mouse.isEmpty())

@@ -29,6 +29,6 @@ of the mod!
 [[dependencies.squarry]]
     modId="hammerlib"
     mandatory=true
-    versionRange = "[18.1.7,)"
+    versionRange = "[18.1.8,)"
     ordering="NONE"
     side="BOTH"
