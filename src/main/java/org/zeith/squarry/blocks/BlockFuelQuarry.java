@@ -1,12 +1,13 @@
 package org.zeith.squarry.blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.hammerlib.annotations.OnlyIf;
@@ -55,7 +55,25 @@ public class BlockFuelQuarry
 				.strength(4F)
 				.requiresCorrectToolForDrops()
 		);
-		BlockHarvestAdapter.bindToolType(BlockHarvestAdapter.MineableType.PICKAXE, this);
+		BlockHarvestAdapter.bindTool(BlockHarvestAdapter.MineableType.PICKAXE, Tiers.IRON, this);
+	}
+
+	@Override
+	public void onRemove(BlockState prevState, Level world, BlockPos pos, BlockState newState, boolean flag64)
+	{
+		if(!prevState.is(newState.getBlock()))
+		{
+			BlockEntity b = world.getBlockEntity(pos);
+
+			if(b instanceof TileFuelQuarry tfq)
+			{
+				Containers.dropContents(world, pos, tfq.queueItems);
+				Containers.dropContents(world, pos, tfq.inventory.items);
+				world.updateNeighbourForOutputSignal(pos, this);
+			}
+
+			super.onRemove(prevState, world, pos, newState, flag64);
+		}
 	}
 
 	@Override
@@ -103,14 +121,7 @@ public class BlockFuelQuarry
 	@Override
 	public List<ItemStack> getDrops(BlockState p_60537_, LootContext.Builder b)
 	{
-		NonNullList<ItemStack> drops = NonNullList.create();
-		drops.add(new ItemStack(this));
-		if(b.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof TileFuelQuarry tfq)
-		{
-			drops.addAll(tfq.queueItems);
-			drops.addAll(tfq.inventory.items);
-		}
-		return drops;
+		return List.of(new ItemStack(this));
 	}
 
 	@Override

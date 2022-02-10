@@ -95,6 +95,9 @@ public class TilePoweredQuarry
 	@Override
 	public void update()
 	{
+		if(!SQConfig.enablePoweredQuarry())
+			return;
+
 		ItemStack stack = inventory.getStackInSlot(0);
 
 		if(!stack.isEmpty())
@@ -198,10 +201,13 @@ public class TilePoweredQuarry
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate)
 	{
-		if(maxReceive >= 200)
-			return (int) (storage.consumeQF(null, maxReceive / 200F, simulate) * 200F);
-		else // Otherwise, convert 1.5 times less efficiently.
-			return (int) (storage.consumeQF(null, maxReceive / 300F, simulate) * 300);
+		if(!SQConfig.enablePoweredQuarry())
+			return 0;
+		float fec = SQConfig.getFeConversion(), hec = SQConfig.getHeConversion();
+		if(maxReceive >= fec)
+			return (int) (storage.consumeQF(null, maxReceive / fec, simulate) * fec);
+		else // Otherwise, convert at half efficiency.
+			return (int) (storage.consumeQF(null, maxReceive / hec, simulate) * hec);
 	}
 
 	@Override
