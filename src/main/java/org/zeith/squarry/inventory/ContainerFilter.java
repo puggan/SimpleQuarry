@@ -135,7 +135,7 @@ public class ContainerFilter
 
 		if(!hi.isEmpty() && hi.getItem() instanceof ItemFilterUpgrade)
 			if(player instanceof ServerPlayer)
-				NetworkHooks.openGui((ServerPlayer) player, forStack(hi), buf -> buf.writeItem(hi));
+				NetworkHooks.openScreen((ServerPlayer) player, forStack(hi), buf -> buf.writeItem(hi));
 	}
 
 	@Override

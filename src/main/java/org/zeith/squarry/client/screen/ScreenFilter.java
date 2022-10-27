@@ -3,7 +3,6 @@ package org.zeith.squarry.client.screen;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import org.zeith.hammerlib.client.screen.ScreenWTFMojang;
@@ -91,19 +90,19 @@ public class ScreenFilter
 		{
 			boolean hover = mouseX >= leftPos + 18 && mouseY >= topPos + 17 && mouseX < leftPos + 34 && mouseY < topPos + 33;
 			if(hover)
-				renderTooltip(matrix, new TranslatableComponent("info.squarry.filter." + (filter.invert ? "blacklist" : "whitelist")), mouseX - leftPos, mouseY - topPos);
+				renderTooltip(matrix, Component.translatable("info.squarry.filter." + (filter.invert ? "blacklist" : "whitelist")), mouseX - leftPos, mouseY - topPos);
 		}
 
 		{
 			boolean hover = mouseX >= leftPos + 18 && mouseY >= topPos + 17 + 18 && mouseX < leftPos + 34 && mouseY < topPos + 33 + 18;
 			if(hover)
-				renderTooltip(matrix, new TranslatableComponent("info.squarry.filter.oredict." + (filter.useod ? "yes" : "no")), mouseX - leftPos, mouseY - topPos);
+				renderTooltip(matrix, Component.translatable("info.squarry.filter.oredict." + (filter.useod ? "yes" : "no")), mouseX - leftPos, mouseY - topPos);
 		}
 
 		{
 			boolean hover = mouseX >= leftPos + 18 && mouseY >= topPos + 17 + 36 && mouseX < leftPos + 34 && mouseY < topPos + 33 + 36;
 			if(hover)
-				renderTooltip(matrix, new TranslatableComponent("info.squarry.filter.meta." + (filter.usemeta ? "yes" : "no")), mouseX - leftPos, mouseY - topPos);
+				renderTooltip(matrix, Component.translatable("info.squarry.filter.meta." + (filter.usemeta ? "yes" : "no")), mouseX - leftPos, mouseY - topPos);
 		}
 
 		return true;

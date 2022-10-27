@@ -2,8 +2,8 @@ package org.zeith.squarry.init;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
 import org.zeith.squarry.SQConstants;
 
 public class TagsSQ
@@ -19,11 +19,11 @@ public class TagsSQ
 		{
 		}
 
-		public static final Tags.IOptionalNamedTag<Block> QUARRY_BLACKLIST = sqtag("quarry_blacklist");
+		public static final TagKey<Block> QUARRY_BLACKLIST = sqtag("quarry_blacklist");
 
-		private static Tags.IOptionalNamedTag<Block> sqtag(String name)
+		private static TagKey<Block> sqtag(String name)
 		{
-			return BlockTags.createOptional(new ResourceLocation(SQConstants.MOD_ID, name));
+			return BlockTags.create(new ResourceLocation(SQConstants.MOD_ID, name));
 		}
 	}
 }

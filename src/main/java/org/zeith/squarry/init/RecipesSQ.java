@@ -40,7 +40,6 @@ public class RecipesSQ
 
 		event.shaped()
 				.result(new ItemStack(BlockFuelQuarry.FUEL_QUARRY))
-				.id(BlockFuelQuarry.FUEL_QUARRY.getRegistryName())
 				.shape("pip", "fgf", "pdp")
 				.map('p', Tags.Items.ENDER_PEARLS)
 				.map('i', Items.IRON_PICKAXE)
@@ -53,7 +52,6 @@ public class RecipesSQ
 		{
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_BASE))
-					.id(ItemsSQ.UPGRADE_BASE.getRegistryName())
 					.shape("rir", "igi", "rir")
 					.map('r', Tags.Items.DUSTS_REDSTONE)
 					.map('i', Tags.Items.INGOTS_IRON)
@@ -62,7 +60,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_FILTER))
-					.id(ItemsSQ.UPGRADE_FILTER.getRegistryName())
 					.shape("rsr", "sus", "rsr")
 					.map('r', Tags.Items.DUSTS_REDSTONE)
 					.map('s', Tags.Items.STRING)
@@ -71,7 +68,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_SILK))
-					.id(ItemsSQ.UPGRADE_SILK.getRegistryName())
 					.shape("lbl", "puh", "lel")
 					.map('l', Items.SEA_LANTERN)
 					.map('b', new PreciseIngredient(silkTouchBook))
@@ -83,7 +79,6 @@ public class RecipesSQ
 
 //			event.shaped()
 //					.result(new ItemStack(ItemsSQ.UPGRADE_UNIFICATION))
-//					.id(ItemsSQ.UPGRADE_UNIFICATION.getRegistryName())
 //					.shape("beb", "gug", "bgb")
 //					.map('g', Items.BOOKSHELF)
 //					.map('e', Items.ENCHANTING_TABLE)
@@ -93,7 +88,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_AUTO_SMELT))
-					.id(ItemsSQ.UPGRADE_AUTO_SMELT.getRegistryName())
 					.shape("olo", "lul", "olo")
 					.map('o', Tags.Items.OBSIDIAN)
 					.map('l', Items.LAVA_BUCKET)
@@ -102,7 +96,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_FILLER))
-					.id(ItemsSQ.UPGRADE_FILLER.getRegistryName())
 					.shape("mdm", "dud", "mdm")
 					.map('m', Items.DIAMOND_SHOVEL)
 					.map('d', Items.GRASS)
@@ -111,7 +104,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_FORTUNE1))
-					.id(ItemsSQ.UPGRADE_FORTUNE1.getRegistryName())
 					.shape("ibi", "dud", "idi")
 					.map('i', Tags.Items.INGOTS_IRON)
 					.map('b', new PreciseIngredient(fortune1Book))
@@ -121,7 +113,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_FORTUNE2))
-					.id(ItemsSQ.UPGRADE_FORTUNE2.getRegistryName())
 					.shape("ibi", "dud", "idi")
 					.map('i', Tags.Items.INGOTS_GOLD)
 					.map('b', new PreciseIngredient(fortune2Book))
@@ -131,7 +122,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_FORTUNE3))
-					.id(ItemsSQ.UPGRADE_FORTUNE3.getRegistryName())
 					.shape("ibi", "dud", "idi")
 					.map('i', Tags.Items.GEMS_AMETHYST)
 					.map('b', new PreciseIngredient(fortune3Book))
@@ -141,7 +131,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_EFFICIENCY1))
-					.id(ItemsSQ.UPGRADE_EFFICIENCY1.getRegistryName())
 					.shape("iri", "rur", "iri")
 					.map('i', Tags.Items.INGOTS_IRON)
 					.map('r', Tags.Items.STORAGE_BLOCKS_REDSTONE)
@@ -150,7 +139,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_EFFICIENCY2))
-					.id(ItemsSQ.UPGRADE_EFFICIENCY2.getRegistryName())
 					.shape("ibi", "rur", "ibi")
 					.map('i', Tags.Items.INGOTS_GOLD)
 					.map('r', Tags.Items.GEMS_AMETHYST)
@@ -160,7 +148,6 @@ public class RecipesSQ
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_EFFICIENCY3))
-					.id(ItemsSQ.UPGRADE_EFFICIENCY3.getRegistryName())
 					.shape("ibi", "rur", "ibi")
 					.map('i', Tags.Items.INGOTS_GOLD)
 					.map('r', Tags.Items.GEMS_DIAMOND)
@@ -176,7 +163,6 @@ public class RecipesSQ
 			if(SQConfig.easyPoweredQuarryRecipe())
 				event.shaped()
 						.result(new ItemStack(BlockPoweredQuarry.POWERED_QUARRY))
-						.id(BlockPoweredQuarry.POWERED_QUARRY.getRegistryName())
 						.shape("ehe", "dqd", "ece")
 						.map('c', Tags.Items.CHESTS_WOODEN)
 						.map('q', BlockFuelQuarry.FUEL_QUARRY)
@@ -187,7 +173,6 @@ public class RecipesSQ
 			else
 				event.shaped()
 						.result(new ItemStack(BlockPoweredQuarry.POWERED_QUARRY))
-						.id(BlockPoweredQuarry.POWERED_QUARRY.getRegistryName())
 						.shape("phl", "dqd", "sem")
 						.map('q', BlockFuelQuarry.FUEL_QUARRY)
 						.map('d', Items.DIAMOND_PICKAXE)

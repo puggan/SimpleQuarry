@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[39,)"
+loaderVersion="[43,)"
 issueTrackerURL="https://gitlab.com/DragonForge/SimpleQuarry/issues"
 license="All rights reserved"
 [[mods]]
@@ -11,24 +11,23 @@ displayURL="http://dccg.herokuapp.com/api/fmlhp/247393"
 logoFile="examplemod.png" #optional
 authors="Zeitheron" #optional
 description='''
-Multi-line description
-of the mod!
+Simple mod that adds a simple quarry. Or two.
 '''
 [[dependencies.squarry]]
     modId="forge"
     mandatory=true
-    versionRange="[39,)"
+    versionRange="[43,)"
     ordering="NONE" # NONE/BEFORE/AFTER
     side="BOTH"
 [[dependencies.squarry]]
     modId="minecraft"
     mandatory=true
-    versionRange = "[1.18,1.19)"
+    versionRange = "[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.squarry]]
     modId="hammerlib"
     mandatory=true
-    versionRange = "[18.1.8,)"
+    versionRange = "[19.2.35,)"
     ordering="NONE"
     side="BOTH"

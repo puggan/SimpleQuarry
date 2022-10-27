@@ -3,10 +3,11 @@ package org.zeith.squarry.items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
@@ -17,6 +18,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ItemFilterUpgrade
 		extends ItemUpgrade
@@ -89,8 +91,8 @@ public class ItemFilterUpgrade
 			return true;
 		if(a.isEmpty() || b.isEmpty())
 			return false;
-		Set<ResourceLocation> tagsA = a.getItem().getTags();
-		Set<ResourceLocation> tagsB = b.getItem().getTags();
+		Set<TagKey<Item>> tagsA = a.getItem().builtInRegistryHolder().tags().collect(Collectors.toSet());
+		Set<TagKey<Item>> tagsB = b.getItem().builtInRegistryHolder().tags().collect(Collectors.toSet());
 		return containsAny(tagsA, tagsB);
 	}
 

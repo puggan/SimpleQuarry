@@ -1,10 +1,10 @@
 package org.zeith.squarry.util;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.crafting.NBTIngredient;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 
 public class PreciseIngredient
-		extends NBTIngredient
+		extends StrictNBTIngredient
 {
 	public PreciseIngredient(ItemStack stack)
 	{

@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
-import org.zeith.squarry.SQConfig;
 import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
 
 public class ItemFillerUpgrade
@@ -31,7 +30,7 @@ public class ItemFillerUpgrade
 		list.add(LongTag.valueOf(pos.asLong()));
 
 		for(int i = 0; i < drops.size(); ++i)
-			if(ItemTags.DIRT.contains(drops.get(i).getItem()))
+			if(drops.get(i).is(ItemTags.DIRT))
 			{
 				drops.remove(i);
 				--i;

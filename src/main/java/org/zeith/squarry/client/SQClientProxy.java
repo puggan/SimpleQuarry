@@ -3,8 +3,7 @@ package org.zeith.squarry.client;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
@@ -45,7 +44,7 @@ public class SQClientProxy
 
 	private void tooltip(ItemTooltipEvent e)
 	{
-		Player p = e.getPlayer();
+		Player p = e.getEntity();
 		if(p == null)
 			return;
 
@@ -53,7 +52,7 @@ public class SQClientProxy
 
 		if(!it.isEmpty() && it.getItem() instanceof ItemUpgrade up)
 		{
-			e.getToolTip().add(new TextComponent(I18n.get("info.squarry.fuel_use_boost", Math.round(up.quarryUseMultiplierClient * 1000F) / 1000F)).withStyle(ChatFormatting.DARK_PURPLE));
+			e.getToolTip().add(Component.literal(I18n.get("info.squarry.fuel_use_boost", Math.round(up.quarryUseMultiplierClient * 1000F) / 1000F)).withStyle(ChatFormatting.DARK_PURPLE));
 		}
 
 		if(p.containerMenu instanceof ContainerFuelQuarry || p.containerMenu instanceof ContainerPoweredQuarry)
@@ -71,10 +70,10 @@ public class SQClientProxy
 			if(burnTime > 0)
 			{
 				float mod = quarry != null ? (float) quarry.getUsageMult() : 1F;
-				e.getToolTip().add(new TranslatableComponent("info.squarry.blocks_broken").withStyle(ChatFormatting.DARK_GRAY).append(": " + (int) (UniversalConverter.FT_QF(burnTime / mod) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(COAL, null)) / SQConfig.getBlockPerCoal()))));
-				e.getToolTip().add(new TranslatableComponent("info.squarry.qfuel_use_boost").withStyle(ChatFormatting.DARK_GRAY).append(" " + (int) (mod * 100) + "%"));
+				e.getToolTip().add(Component.translatable("info.squarry.blocks_broken").withStyle(ChatFormatting.DARK_GRAY).append(": " + (int) (UniversalConverter.FT_QF(burnTime / mod) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(COAL, null)) / SQConfig.getBlockPerCoal()))));
+				e.getToolTip().add(Component.translatable("info.squarry.qfuel_use_boost").withStyle(ChatFormatting.DARK_GRAY).append(" " + (int) (mod * 100) + "%"));
 			} else
-				e.getToolTip().add(new TranslatableComponent("info.squarry.not_fuel").withStyle(ChatFormatting.DARK_GRAY));
+				e.getToolTip().add(Component.translatable("info.squarry.not_fuel").withStyle(ChatFormatting.DARK_GRAY));
 		}
 	}
 }
