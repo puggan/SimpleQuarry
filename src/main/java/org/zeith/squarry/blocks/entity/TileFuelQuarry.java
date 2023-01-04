@@ -1,8 +1,6 @@
 package org.zeith.squarry.blocks.entity;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +14,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -34,9 +31,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.api.wrench.IWrenchable;
-import org.zeith.hammerlib.annotations.OnlyIf;
-import org.zeith.hammerlib.annotations.RegistryName;
-import org.zeith.hammerlib.annotations.SimplyRegister;
+import org.zeith.hammerlib.annotations.*;
 import org.zeith.hammerlib.api.forge.BlockAPI;
 import org.zeith.hammerlib.api.inv.SimpleInventory;
 import org.zeith.hammerlib.api.io.NBTSerializable;
@@ -44,9 +39,7 @@ import org.zeith.hammerlib.api.tiles.IContainerTile;
 import org.zeith.hammerlib.net.properties.PropertyInt;
 import org.zeith.hammerlib.tiles.TileSyncableTickable;
 import org.zeith.hammerlib.util.java.DirectStorage;
-import org.zeith.squarry.SQCommonProxy;
-import org.zeith.squarry.SQConfig;
-import org.zeith.squarry.SimpleQuarry;
+import org.zeith.squarry.*;
 import org.zeith.squarry.api.ItemInjector;
 import org.zeith.squarry.api.ItemStackList;
 import org.zeith.squarry.api.energy.QFStorage;
@@ -55,13 +48,10 @@ import org.zeith.squarry.blocks.BlockFuelQuarry;
 import org.zeith.squarry.init.TagsSQ;
 import org.zeith.squarry.inventory.ContainerFuelQuarry;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
-import static org.zeith.squarry.SQConstants.FT;
-import static org.zeith.squarry.SQConstants.QF;
+import static org.zeith.squarry.SQConstants.*;
 
 @SimplyRegister
 public class TileFuelQuarry
@@ -114,7 +104,7 @@ public class TileFuelQuarry
 		if(cpos != null && cpos.asLong() != worldPosition.asLong() && level.getBlockEntity(cpos) instanceof TileFuelQuarry)
 		{
 			level.destroyBlock(worldPosition, true);
-			level.explode(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 3, Explosion.BlockInteraction.NONE);
+			level.explode(null, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 3, Level.ExplosionInteraction.NONE);
 			return;
 		}
 		map.put(chunkPos, worldPosition);
@@ -221,7 +211,7 @@ public class TileFuelQuarry
 		if(Double.isNaN(qf = storage.getStoredQF(null)) || Double.isInfinite(qf))
 			storage.storedQF = 0.0;
 		
-		if(y > -64 && atTickRate(tickRate) && storage.getStoredQF(null) >= QFPerBlock)
+		if(y > level.getMinBuildHeight() && atTickRate(tickRate) && storage.getStoredQF(null) >= QFPerBlock)
 		{
 			boolean hasBrokenBlock = false;
 			

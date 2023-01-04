@@ -1,22 +1,14 @@
 package org.zeith.squarry.blocks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -24,12 +16,11 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import org.zeith.hammerlib.annotations.OnlyIf;
-import org.zeith.hammerlib.annotations.RegistryName;
-import org.zeith.hammerlib.annotations.SimplyRegister;
+import org.zeith.hammerlib.annotations.*;
 import org.zeith.hammerlib.api.blocks.ICreativeTabBlock;
 import org.zeith.hammerlib.api.forge.BlockAPI;
 import org.zeith.hammerlib.api.forge.ContainerAPI;
+import org.zeith.hammerlib.api.items.CreativeTab;
 import org.zeith.hammerlib.core.adapter.BlockHarvestAdapter;
 import org.zeith.hammerlib.util.java.Cast;
 import org.zeith.squarry.SQConfig;
@@ -125,7 +116,7 @@ public class BlockFuelQuarry
 	}
 	
 	@Override
-	public CreativeModeTab getCreativeTab()
+	public CreativeTab getCreativeTab()
 	{
 		return SimpleQuarry.ITEM_GROUP;
 	}

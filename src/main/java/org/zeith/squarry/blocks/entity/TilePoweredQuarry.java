@@ -1,8 +1,6 @@
 package org.zeith.squarry.blocks.entity;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -12,13 +10,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
-import org.zeith.hammerlib.annotations.OnlyIf;
-import org.zeith.hammerlib.annotations.RegistryName;
-import org.zeith.hammerlib.annotations.SimplyRegister;
+import org.zeith.hammerlib.annotations.*;
 import org.zeith.hammerlib.api.forge.BlockAPI;
 import org.zeith.hammerlib.api.inv.SimpleInventory;
 import org.zeith.hammerlib.api.io.NBTSerializable;
@@ -37,30 +33,30 @@ public class TilePoweredQuarry
 	@RegistryName("powered_quarry")
 	@OnlyIf(owner = SQConfig.class, member = "enablePoweredQuarry")
 	public static final BlockEntityType<TileFuelQuarry> POWERED_QUARRY = BlockAPI.createBlockEntityType(TilePoweredQuarry::new, BlockPoweredQuarry.POWERED_QUARRY);
-
+	
 	@NBTSerializable
 	public final SimpleInventory invUpgrades = new SimpleInventory(5);
-
+	
 	public CompoundTag additionalTags = new CompoundTag();
-
+	
 	protected TilePoweredQuarry(BlockEntityType<?> type, BlockPos pos, BlockState state)
 	{
 		super(type, pos, state);
 		tickRate = SQConfig.poweredQuarryTickRate();
 	}
-
+	
 	private TilePoweredQuarry(BlockPos pos, BlockState state)
 	{
 		super(POWERED_QUARRY, pos, state);
 		tickRate = SQConfig.poweredQuarryTickRate();
 	}
-
+	
 	@Override
 	protected double getQFCapacity()
 	{
 		return 256000.0;
 	}
-
+	
 	@Override
 	public double getUsageMult()
 	{
@@ -70,12 +66,12 @@ public class TilePoweredQuarry
 				val *= getUpgrade(i).quarryUseMultiplierServer;
 		return val;
 	}
-
+	
 	public ItemStack getUpgradeStack(int index)
 	{
 		return invUpgrades.getStackInSlot(index % 5);
 	}
-
+	
 	public ItemUpgrade getUpgrade(int index)
 	{
 		ItemStack stack = getUpgradeStack(index);
@@ -83,7 +79,7 @@ public class TilePoweredQuarry
 			return u;
 		return null;
 	}
-
+	
 	public ItemUpgrade[] getUpgrades()
 	{
 		ItemUpgrade[] upgrades = new ItemUpgrade[5];
@@ -91,18 +87,18 @@ public class TilePoweredQuarry
 			upgrades[i] = getUpgrade(i);
 		return upgrades;
 	}
-
+	
 	@Override
 	public void update()
 	{
 		if(!SQConfig.enablePoweredQuarry())
 			return;
-
+		
 		ItemStack stack = inventory.getStackInSlot(0);
-
+		
 		if(!stack.isEmpty())
 		{
-			stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(pc ->
+			stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(pc ->
 			{
 				int canExtract = pc.extractEnergy(pc.getEnergyStored(), true);
 				canExtract = Math.min(receiveEnergy(canExtract, true), canExtract);
@@ -110,7 +106,7 @@ public class TilePoweredQuarry
 				receiveEnergy(canExtract, false);
 			});
 		}
-
+		
 		for(int i = 0; i < invUpgrades.getContainerSize(); ++i)
 		{
 			ItemUpgrade up = getUpgrade(i);
@@ -122,11 +118,11 @@ public class TilePoweredQuarry
 			} else if(up != null)
 				up.tick(this, i);
 		}
-
+		
 		super.update();
 		tickRate = SQConfig.poweredQuarryTickRate();
 	}
-
+	
 	@Override
 	public NonNullList<ItemStack> makeDrops(BlockPos pos, BlockState state)
 	{
@@ -136,13 +132,13 @@ public class TilePoweredQuarry
 				getUpgrade(i).handleDrops(this, pos, drops);
 		return drops;
 	}
-
+	
 	@Override
 	public void addQueueItem(ItemStack e)
 	{
 		if(e.isEmpty())
 			return;
-
+		
 		for(int i = 0; i < invUpgrades.getContainerSize(); ++i)
 		{
 			ItemUpgrade up = getUpgrade(i);
@@ -155,23 +151,23 @@ public class TilePoweredQuarry
 					err.printStackTrace();
 				}
 		}
-
+		
 		if(!e.isEmpty())
 			super.addQueueItem(e);
 	}
-
+	
 	@Override
 	public AbstractContainerMenu openContainer(Player player, int windowId)
 	{
 		return new ContainerPoweredQuarry(player, windowId, this);
 	}
-
+	
 	@Override
 	protected Block getQuarryBlock()
 	{
 		return BlockPoweredQuarry.POWERED_QUARRY;
 	}
-
+	
 	@Override
 	public void addToolEnchantments(Map<Enchantment, Integer> enchantmentMap)
 	{
@@ -182,14 +178,14 @@ public class TilePoweredQuarry
 				iu.addEnchantments(this, enchantmentMap);
 		}
 	}
-
+	
 	@Override
 	public void readNBT(CompoundTag nbt)
 	{
 		super.readNBT(nbt);
 		additionalTags = nbt.getCompound("AdditionalTags");
 	}
-
+	
 	@Override
 	public CompoundTag writeNBT(CompoundTag nbt)
 	{
@@ -197,7 +193,7 @@ public class TilePoweredQuarry
 		nbt.put("AdditionalTags", additionalTags.copy());
 		return nbt;
 	}
-
+	
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate)
 	{
@@ -209,43 +205,43 @@ public class TilePoweredQuarry
 		else // Otherwise, convert at half efficiency.
 			return (int) (storage.consumeQF(null, maxReceive / hec, simulate) * hec);
 	}
-
+	
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate)
 	{
 		return 0;
 	}
-
+	
 	@Override
 	public int getEnergyStored()
 	{
 		return 0;
 	}
-
+	
 	@Override
 	public int getMaxEnergyStored()
 	{
 		return 1000;
 	}
-
+	
 	@Override
 	public boolean canExtract()
 	{
 		return false;
 	}
-
+	
 	@Override
 	public boolean canReceive()
 	{
 		return true;
 	}
-
+	
 	final LazyOptional<IEnergyStorage> energyStorageTile = LazyOptional.of(() -> this);
-
+	
 	@Override
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side)
 	{
-		if(cap == CapabilityEnergy.ENERGY) return this.energyStorageTile.cast();
+		if(cap == ForgeCapabilities.ENERGY) return this.energyStorageTile.cast();
 		return super.getCapability(cap, side);
 	}
 }
