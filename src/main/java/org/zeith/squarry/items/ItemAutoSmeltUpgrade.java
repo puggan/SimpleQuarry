@@ -41,7 +41,7 @@ public class ItemAutoSmeltUpgrade
 
 			opt.ifPresent(recipe ->
 			{
-				ItemStack res = recipe.assemble(ctr);
+				ItemStack res = recipe.assemble(ctr, quarry.getLevel().registryAccess());
 				if(!res.isEmpty())
 				{
 					res.setCount(res.getCount() * drops.get(j).getCount());

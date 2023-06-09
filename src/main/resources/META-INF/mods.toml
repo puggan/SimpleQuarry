@@ -1,38 +1,33 @@
 modLoader="javafml"
-loaderVersion="[44,)"
-issueTrackerURL="https://github.com/dragon-forge/SimpleQuarry/issues"
-license="All rights reserved"
-
+loaderVersion="${forge_version_range}"
+issueTrackerURL="${issue_tracker_url}"
+license="${mod_license}"
 [[mods]]
-modId="squarry"
-version="${file.jarVersion}"
-displayName="Simple Quarry"
-updateJSONURL="http://h.zeith.org/api/fmluc/247393"
-displayURL="http://h.zeith.org/api/fmlhp/247393"
-# logoFile="examplemod.png"
-authors="Zeitheron"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+updateJSONURL="https://api.modrinth.com/updates/${modrinth_project}/forge_updates.json"
+displayURL="https://modrinth.com/mod/${modrinth_project}"
+logoFile="${mod_id}.png"
+credits="None"
+authors="${mod_authors}"
+description='''${mod_description}'''
 
-description='''
-Simple mod that adds a simple quarry. Or two.
-'''
-
-[[dependencies.squarry]]
+[[dependencies.${mod_id}]]
     modId="forge"
     mandatory=true
-    versionRange="[44,)"
-    ordering="NONE"
+    versionRange="${forge_version_range}"
+    ordering="NONE" # NONE/BEFORE/AFTER
     side="BOTH"
-
-[[dependencies.squarry]]
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange = "[1.19.3,1.20)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
-
-[[dependencies.squarry]]
+[[dependencies.${mod_id}]]
     modId="hammerlib"
     mandatory=true
-    versionRange = "[19.4.47,)"
-    ordering="AFTER"
+    versionRange="[${hl_version},)"
+    ordering="NONE"
     side="BOTH"

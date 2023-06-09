@@ -4,7 +4,6 @@ import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -24,7 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -90,11 +89,6 @@ public class TileFuelQuarry
 		super(type, pos, state);
 		this.dispatcher.registerProperty("burn_ticks", burnTicks);
 		this.dispatcher.registerProperty("total_burn_ticks", totalBurnTicks);
-	}
-	
-	private TileFuelQuarry(BlockPos pos, BlockState state)
-	{
-		super(FUEL_QUARRY, pos, state);
 	}
 	
 	public void validateQuarry()
@@ -269,8 +263,8 @@ public class TileFuelQuarry
 			Map<Enchantment, Integer> enchMap = new HashMap<>();
 			addToolEnchantments(enchMap);
 			EnchantmentHelper.setEnchantments(enchMap, tool);
-			LootContext.Builder bl = new LootContext.Builder(sl)
-					.withRandom(RandomSource.create())
+			
+			LootParams.Builder bl = new LootParams.Builder(sl)
 					.withParameter(LootContextParams.BLOCK_STATE, state)
 					.withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(worldPosition))
 					.withParameter(LootContextParams.TOOL, tool);

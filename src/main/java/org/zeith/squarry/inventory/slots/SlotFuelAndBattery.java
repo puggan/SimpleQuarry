@@ -2,7 +2,7 @@ package org.zeith.squarry.inventory.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class SlotFuelAndBattery
 		extends SlotFurnaceFuel
@@ -11,10 +11,10 @@ public class SlotFuelAndBattery
 	{
 		super(inv, id, x, y);
 	}
-
+	
 	@Override
 	public boolean mayPlace(ItemStack stack)
 	{
-		return stack.getCapability(CapabilityEnergy.ENERGY).isPresent() || super.mayPlace(stack);
+		return stack.getCapability(ForgeCapabilities.ENERGY).isPresent() || super.mayPlace(stack);
 	}
 }

@@ -45,12 +45,6 @@ public class TilePoweredQuarry
 		tickRate = SQConfig.poweredQuarryTickRate();
 	}
 	
-	private TilePoweredQuarry(BlockPos pos, BlockState state)
-	{
-		super(POWERED_QUARRY, pos, state);
-		tickRate = SQConfig.poweredQuarryTickRate();
-	}
-	
 	@Override
 	protected double getQFCapacity()
 	{

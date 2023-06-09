@@ -12,8 +12,7 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.hammerlib.annotations.*;
@@ -42,7 +41,7 @@ public class BlockPoweredQuarry
 	protected BlockPoweredQuarry()
 	{
 		super(Properties
-				.of(Material.METAL)
+				.of()
 				.sound(SoundType.METAL)
 				.strength(4.5F)
 				.requiresCorrectToolForDrops()
@@ -113,7 +112,7 @@ public class BlockPoweredQuarry
 	}
 	
 	@Override
-	public List<ItemStack> getDrops(BlockState p_60537_, LootContext.Builder b)
+	public List<ItemStack> getDrops(BlockState p_60537_, LootParams.Builder b)
 	{
 		return List.of(new ItemStack(this));
 	}
