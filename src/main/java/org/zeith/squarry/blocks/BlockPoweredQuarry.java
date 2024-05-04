@@ -35,7 +35,6 @@ public class BlockPoweredQuarry
 		implements ICreativeTabBlock
 {
 	@RegistryName("powered_quarry")
-	@OnlyIf(owner = SQConfig.class, member = "enablePoweredQuarry")
 	public static final BlockPoweredQuarry POWERED_QUARRY = new BlockPoweredQuarry();
 	
 	protected BlockPoweredQuarry()
@@ -92,7 +91,7 @@ public class BlockPoweredQuarry
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(SQConfig.enablePoweredQuarry())
+		if(SQConfig.isPoweredQuarry())
 			ContainerAPI.openContainerTile(player, Cast.cast(level.getBlockEntity(pos), TileFuelQuarry.class));
 		return InteractionResult.SUCCESS;
 	}

@@ -1,19 +1,34 @@
 package org.zeith.squarry;
 
+import lombok.Getter;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.zeith.hammerlib.util.configured.ConfiguredLib;
 import org.zeith.hammerlib.util.configured.data.DecimalValueRange;
 import org.zeith.hammerlib.util.configured.data.IntValueRange;
+import org.zeith.hammerlib.util.configured.types.*;
 
 import java.io.File;
+import java.util.*;
 
 public class SQConfig
 {
-	private static double blocksPerCoal;
-	private static int fQuarryTickRate, pQuarryTickRate;
-	private static boolean poweredQuarry, easyPowerQuarryRecipe;
-	private static float feConversion, heConversion;
-	private static boolean particleVortex;
+	public static final String COMMON_NAMESPACE = Tags.Items.RAW_MATERIALS.location().getNamespace();
+	private static final String[] BASE_MATERIALS = {
+			COMMON_NAMESPACE + ":raw_materials/",
+			COMMON_NAMESPACE + ":nuggets/",
+			COMMON_NAMESPACE + ":dusts/",
+			COMMON_NAMESPACE + ":gems/"
+	};
+	
+	private static @Getter double blocksPerCoal;
+	private static @Getter int fuelQuarryTickRate, poweredQuarryTickRate;
+	private static @Getter boolean poweredQuarry, easyPowerQuarryRecipe;
+	private static @Getter float feConversion, heConversion;
+	private static @Getter boolean particleVortex;
+	private static @Getter String[] allowedUnificationMaterials = BASE_MATERIALS.clone();
+	private static @Getter String[] excludedUnificationEntries = { };
+	private static @Getter boolean enableUnification;
 	
 	public static void reload()
 	{
@@ -35,7 +50,7 @@ public class SQConfig
 							.getValue()
 							.doubleValue();
 					
-					fQuarryTickRate = fquarry.getElement(ConfiguredLib.INT, "Fuel Quarry Mine Tick Rate")
+					fuelQuarryTickRate = fquarry.getElement(ConfiguredLib.INT, "Fuel Quarry Mine Tick Rate")
 							.withRange(IntValueRange.rangeClosed(1, 65536))
 							.withDefault(10)
 							.withComment("How frequently the Fuel Quarry will mine blocks?")
@@ -50,7 +65,7 @@ public class SQConfig
 							.withComment("Should powered quarry be added into the game?")
 							.getValue();
 					
-					pQuarryTickRate = pquarry.getElement(ConfiguredLib.INT, "Powered Quarry Mine Tick Rate")
+					poweredQuarryTickRate = pquarry.getElement(ConfiguredLib.INT, "Powered Quarry Mine Tick Rate")
 							.withRange(IntValueRange.rangeClosed(1, 65536))
 							.withDefault(5)
 							.withComment("How frequently the Powered Quarry will mine blocks?")
@@ -76,6 +91,40 @@ public class SQConfig
 							.getValue()
 							.floatValue();
 				}
+				
+				ConfigCategory unification = gameplay.setupSubCategory("Unification Upgrade").withComment("All tweaks to unification upgrade.");
+				{
+					enableUnification = unification.getElement(ConfiguredLib.BOOLEAN, "Enabled")
+							.withDefault(true)
+							.withComment("Should the unification upgrade perform unification? If set to 'false', the upgrade will do nothing.")
+							.getValue();
+					
+					ConfigArray<ConfigString> allowedPrefixes = unification.getElement(ConfiguredLib.STRING.arrayOf(), "Allowed Prefixes")
+							.withComment("This is a list of supported conversible tag groups.\nEvery entry ending with '/' would require item to have tags starting with the input entry.\nOtherwise it matches the tag precisely.");
+					
+					List<ConfigString> elems = allowedPrefixes.getElements();
+					if(elems.isEmpty())
+						for(String mat : BASE_MATERIALS)
+							elems.add(allowedPrefixes.createElement().withDefault(mat));
+					
+					Set<String> keys = new HashSet<>();
+					for(ConfigString string : new ArrayList<>(elems))
+					{
+						if(keys.add(string.getValue())) continue;
+						elems.remove(string);
+					}
+					
+					allowedUnificationMaterials = keys.toArray(String[]::new);
+					
+					ConfigArray<ConfigString> excludedItems = unification.getElement(ConfiguredLib.STRING.arrayOf(), "Excluded Items")
+							.withComment("This is a list items and/or tags (use '#' as first character to reference a tag) that are not going to be conversible.");
+					
+					excludedUnificationEntries = excludedItems.getElements()
+							.stream()
+							.map(ConfigString::getValue)
+							.distinct()
+							.toArray(String[]::new);
+				}
 			}
 			
 			var clientside = cfg.setupCategory("Clientside").withComment("Client-side features of the mod");
@@ -94,53 +143,8 @@ public class SQConfig
 		}
 	}
 	
-	public static boolean enableParticleVortex()
-	{
-		return particleVortex;
-	}
-	
-	public static float getFeConversion()
-	{
-		return feConversion;
-	}
-	
-	public static float getHeConversion()
-	{
-		return heConversion;
-	}
-	
-	public static boolean enableFuelQuarry()
-	{
-		return true;
-	}
-	
-	public static boolean enablePoweredQuarry()
-	{
-		return poweredQuarry;
-	}
-	
 	public static boolean enableUpgrades()
 	{
 		return poweredQuarry;
-	}
-	
-	public static boolean easyPoweredQuarryRecipe()
-	{
-		return easyPowerQuarryRecipe;
-	}
-	
-	public static double getBlockPerCoal()
-	{
-		return blocksPerCoal;
-	}
-	
-	public static int fuelQuarryTickRate()
-	{
-		return fQuarryTickRate;
-	}
-	
-	public static int poweredQuarryTickRate()
-	{
-		return pQuarryTickRate;
 	}
 }

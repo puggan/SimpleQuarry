@@ -70,7 +70,7 @@ public class SQClientProxy
 			if(burnTime > 0)
 			{
 				float mod = quarry != null ? (float) quarry.getUsageMult() : 1F;
-				e.getToolTip().add(Component.translatable("info.squarry.blocks_broken").withStyle(ChatFormatting.DARK_GRAY).append(": " + (int) (UniversalConverter.FT_QF(burnTime / mod) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(COAL, null)) / SQConfig.getBlockPerCoal()))));
+				e.getToolTip().add(Component.translatable("info.squarry.blocks_broken").withStyle(ChatFormatting.DARK_GRAY).append(": " + (int) (UniversalConverter.FT_QF(burnTime / mod) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(COAL, null)) / SQConfig.getBlocksPerCoal()))));
 				e.getToolTip().add(Component.translatable("info.squarry.qfuel_use_boost").withStyle(ChatFormatting.DARK_GRAY).append(" " + (int) (mod * 100) + "%"));
 			} else
 				e.getToolTip().add(Component.translatable("info.squarry.not_fuel").withStyle(ChatFormatting.DARK_GRAY));

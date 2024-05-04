@@ -67,7 +67,7 @@ public class TileFuelQuarry
 	@NBTSerializable
 	public final SimpleInventory inventory = new SimpleInventory(1);
 	
-	public int tickRate = SQConfig.fuelQuarryTickRate();
+	public int tickRate = SQConfig.getFuelQuarryTickRate();
 	
 	@NBTSerializable
 	public int _burnTicks, _totalBurnTicks, y = Integer.MIN_VALUE;
@@ -141,7 +141,7 @@ public class TileFuelQuarry
 		{
 			if(boundingBox == null || boundingBox.minY != (double) y)
 				boundingBox = new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, worldPosition.getY(), chunkZ * 16 + 16);
-			if(SQConfig.enableParticleVortex())
+			if(SQConfig.isParticleVortex())
 			{
 				if(vortex == null)
 					vortex = SimpleQuarry.PROXY.createQuarryVortex(this);
@@ -153,7 +153,7 @@ public class TileFuelQuarry
 		if(queueItems.size() >= 2)
 		{
 			tryEject();
-			tickRate = SQConfig.fuelQuarryTickRate();
+			tickRate = SQConfig.getFuelQuarryTickRate();
 			return;
 		}
 		
@@ -173,7 +173,7 @@ public class TileFuelQuarry
 		
 		if(state0.getBlock() != getQuarryBlock())
 		{
-			tickRate = SQConfig.fuelQuarryTickRate();
+			tickRate = SQConfig.getFuelQuarryTickRate();
 			return;
 		}
 		
@@ -186,7 +186,7 @@ public class TileFuelQuarry
 			sync();
 		}
 		
-		double QFPerBlock = FT.convertTo(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null), QF) / SQConfig.getBlockPerCoal();
+		double QFPerBlock = FT.convertTo(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null), QF) / SQConfig.getBlocksPerCoal();
 		QFPerBlock *= getUsageMult();
 		
 		int bt;
@@ -250,7 +250,7 @@ public class TileFuelQuarry
 			captureEntityItems(level.getEntitiesOfClass(ItemEntity.class, new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, worldPosition.getY(), chunkZ * 16 + 16)));
 		
 		tryEject();
-		tickRate = SQConfig.fuelQuarryTickRate();
+		tickRate = SQConfig.getFuelQuarryTickRate();
 	}
 	
 	public boolean isDone()

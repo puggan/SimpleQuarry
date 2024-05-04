@@ -46,9 +46,9 @@ public class RecipesSQ
 				.map('f', Items.FURNACE)
 				.map('g', Items.CLOCK)
 				.map('d', Items.DIAMOND_PICKAXE)
-				.registerIf(SQConfig::enableFuelQuarry);
+				.register();
 
-		if(SQConfig.enableUpgrades())
+		if(SQConfig.isPoweredQuarry())
 		{
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_BASE))
@@ -77,14 +77,14 @@ public class RecipesSQ
 					.map('e', Tags.Items.GEMS_EMERALD)
 					.register();
 
-//			event.shaped()
-//					.result(new ItemStack(ItemsSQ.UPGRADE_UNIFICATION))
-//					.shape("beb", "gug", "bgb")
-//					.map('g', Items.BOOKSHELF)
-//					.map('e', Items.ENCHANTING_TABLE)
-//					.map('b', Tags.Items.INGOTS_GOLD)
-//					.map('u', ItemsSQ.UPGRADE_BASE)
-//					.register();
+			event.shaped()
+					.result(new ItemStack(ItemsSQ.UPGRADE_UNIFICATION))
+					.shape("beb", "gug", "bgb")
+					.map('g', Items.BOOKSHELF)
+					.map('e', Items.ENCHANTING_TABLE)
+					.map('b', Tags.Items.INGOTS_GOLD)
+					.map('u', ItemsSQ.UPGRADE_BASE)
+					.register();
 
 			event.shaped()
 					.result(new ItemStack(ItemsSQ.UPGRADE_AUTO_SMELT))
@@ -156,11 +156,11 @@ public class RecipesSQ
 					.register();
 		}
 
-		if(SQConfig.enablePoweredQuarry())
+		if(SQConfig.isPoweredQuarry())
 		{
 			topQuarry = new ItemStack(BlockPoweredQuarry.POWERED_QUARRY);
 
-			if(SQConfig.easyPoweredQuarryRecipe())
+			if(SQConfig.isEasyPowerQuarryRecipe())
 				event.shaped()
 						.result(new ItemStack(BlockPoweredQuarry.POWERED_QUARRY))
 						.shape("ehe", "dqd", "ece")

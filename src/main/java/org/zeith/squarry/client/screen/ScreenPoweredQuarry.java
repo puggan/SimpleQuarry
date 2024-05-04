@@ -77,7 +77,7 @@ public class ScreenPoweredQuarry
 			
 			ItemStack mouse = menu.getCarried();
 			if(mouse.isEmpty())
-				gfx.renderTooltip(font, Component.literal(df.format(Math.floor(tile.storage.getStoredQF(null) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null)) / SQConfig.getBlockPerCoal()))) + " " + I18n.get("info.squarry.blockstobreak")), 16, 48);
+				gfx.renderTooltip(font, Component.literal(df.format(Math.floor(tile.storage.getStoredQF(null) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null)) / SQConfig.getBlocksPerCoal()))) + " " + I18n.get("info.squarry.blockstobreak")), 16, 48);
 		}
 		
 		return true;

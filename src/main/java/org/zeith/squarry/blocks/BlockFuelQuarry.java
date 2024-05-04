@@ -34,7 +34,6 @@ public class BlockFuelQuarry
 		implements ICreativeTabBlock
 {
 	@RegistryName("fuel_quarry")
-	@OnlyIf(owner = SQConfig.class, member = "enableFuelQuarry")
 	public static final BlockFuelQuarry FUEL_QUARRY = new BlockFuelQuarry();
 	
 	protected BlockFuelQuarry()

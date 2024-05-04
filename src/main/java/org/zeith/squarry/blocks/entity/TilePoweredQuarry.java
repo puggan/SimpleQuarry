@@ -42,7 +42,7 @@ public class TilePoweredQuarry
 	protected TilePoweredQuarry(BlockEntityType<?> type, BlockPos pos, BlockState state)
 	{
 		super(type, pos, state);
-		tickRate = SQConfig.poweredQuarryTickRate();
+		tickRate = SQConfig.getPoweredQuarryTickRate();
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class TilePoweredQuarry
 	@Override
 	public void update()
 	{
-		if(!SQConfig.enablePoweredQuarry())
+		if(!SQConfig.isPoweredQuarry())
 			return;
 		
 		ItemStack stack = inventory.getStackInSlot(0);
@@ -114,7 +114,7 @@ public class TilePoweredQuarry
 		}
 		
 		super.update();
-		tickRate = SQConfig.poweredQuarryTickRate();
+		tickRate = SQConfig.getPoweredQuarryTickRate();
 	}
 	
 	@Override
@@ -191,7 +191,7 @@ public class TilePoweredQuarry
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate)
 	{
-		if(!SQConfig.enablePoweredQuarry())
+		if(!SQConfig.isPoweredQuarry())
 			return 0;
 		float fec = SQConfig.getFeConversion(), hec = SQConfig.getHeConversion();
 		if(maxReceive >= fec)
