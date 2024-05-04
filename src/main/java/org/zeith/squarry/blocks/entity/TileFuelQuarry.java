@@ -60,20 +60,30 @@ public class TileFuelQuarry
 	@RegistryName("fuel_quarry")
 	@OnlyIf(owner = SQConfig.class, member = "enableFuelQuarry")
 	public static final BlockEntityType<TileFuelQuarry> FUEL_QUARRY = BlockAPI.createBlockEntityType(TileFuelQuarry::new, BlockFuelQuarry.FUEL_QUARRY);
+	
 	public static final Map<ResourceKey<Level>, Map<ChunkPos, BlockPos>> QUARRY_MAP = new HashMap<>();
 	private static final Function<ResourceKey<Level>, Map<ChunkPos, BlockPos>> QUARRY_MAP_COMPUTE = world -> new HashMap<>();
+	
 	@NBTSerializable
 	public final SimpleInventory inventory = new SimpleInventory(1);
+	
 	public int tickRate = SQConfig.fuelQuarryTickRate();
+	
 	@NBTSerializable
-	public int _burnTicks, _totalBurnTicks, y = -65;
+	public int _burnTicks, _totalBurnTicks, y = Integer.MIN_VALUE;
+	
 	@NBTSerializable
 	public final QFStorage storage = new QFStorage(getQFCapacity());
+	
 	@NBTSerializable
 	public final ItemStackList queueItems = ItemStackList.createList();
+	
 	public AABB boundingBox;
 	//	private QuarryVortex vortex;
+	
+	@NBTSerializable
 	private ChunkPos chunkPos;
+	
 	public ParticleVortex vortex;
 	
 	protected double getQFCapacity()
@@ -116,9 +126,16 @@ public class TileFuelQuarry
 		ItemStack stack;
 		LevelChunk c = level.getChunkAt(worldPosition);
 		
+		var pcp = chunkPos;
 		chunkPos = c.getPos();
 		int chunkX = chunkPos.x;
 		int chunkZ = chunkPos.z;
+		if(pcp != null && (pcp.x != chunkX || pcp.z != chunkZ))
+		{
+			// Quarry has moved
+			SimpleQuarry.LOG.info("Quarry moved from chunk {}, {} -> {}, {} (currently at {}). Reset Y level.", pcp.x, pcp.z, chunkX, chunkZ, worldPosition);
+			y = Integer.MIN_VALUE;
+		}
 		
 		if(level.isClientSide)
 		{
@@ -140,7 +157,7 @@ public class TileFuelQuarry
 			return;
 		}
 		
-		if(y == -65)
+		if(y == Integer.MIN_VALUE)
 		{
 			y = worldPosition.getY() - 1;
 			boundingBox = new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, y + 1, chunkZ * 16 + 16);
@@ -151,7 +168,6 @@ public class TileFuelQuarry
 		{
 			validateQuarry();
 		}
-		
 		
 		BlockState state0 = level.getBlockState(worldPosition);
 		
@@ -175,12 +191,12 @@ public class TileFuelQuarry
 		
 		int bt;
 		if(state0.getValue(BlockStateProperties.ENABLED)
-				&& !level.isClientSide
-				&& atTickRate(20)
-				&& _burnTicks < 1
-				&& !(stack = inventory.getStackInSlot(0)).isEmpty()
-				&& (bt = ForgeHooks.getBurnTime(stack, null)) > 0
-				&& storage.consumeQF(null, FT.convertTo(1, QF), true) == FT.convertTo(1, QF))
+		   && !level.isClientSide
+		   && atTickRate(20)
+		   && _burnTicks < 1
+		   && !(stack = inventory.getStackInSlot(0)).isEmpty()
+		   && (bt = ForgeHooks.getBurnTime(stack, null)) > 0
+		   && storage.consumeQF(null, FT.convertTo(1, QF), true) == FT.convertTo(1, QF))
 		{
 			burnTicks.setInt(burnTicks.getInt() + bt);
 			
