@@ -1,6 +1,7 @@
 package org.zeith.squarry.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,6 +47,26 @@ public class BlockPoweredQuarry
 				.requiresCorrectToolForDrops()
 		);
 		BlockHarvestAdapter.bindTool(BlockHarvestAdapter.MineableType.PICKAXE, Tiers.IRON, this);
+	}
+	
+	@Override
+	public boolean hasAnalogOutputSignal(BlockState state)
+	{
+		return true;
+	}
+	
+	@Override
+	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+	{
+		if(level.getBlockEntity(pos) instanceof TileFuelQuarry tfq)
+		{
+			int y = pos.getY();
+			int minedLevels = y - tfq.y;
+			int maxMineLevels = y - level.getMinBuildHeight();
+			int v = Math.round(minedLevels * 15F / maxMineLevels);
+			return 15 - Mth.clamp(v, 0, 15);
+		}
+		return 0;
 	}
 	
 	@Override
