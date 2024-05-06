@@ -4,8 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +21,7 @@ import org.zeith.hammerlib.annotations.RegistryName;
 import org.zeith.hammerlib.annotations.SimplyRegister;
 import org.zeith.hammerlib.api.blocks.ICreativeTabBlock;
 import org.zeith.hammerlib.api.items.CreativeTab;
+import org.zeith.hammerlib.core.adapter.BlockHarvestAdapter;
 import org.zeith.hammerlib.core.adapter.TagAdapter;
 import org.zeith.squarry.SimpleQuarry;
 import org.zeith.squarry.blocks.entity.TileFuelQuarry;
@@ -33,20 +34,25 @@ public class BlockQuarryPipe
 		extends Block
 		implements ICreativeTabBlock
 {
+	protected static final VoxelShape SHAPE = box(5, 0, 5, 11, 16, 11);
+	
 	@RegistryName("quarry_pipe")
-	public static final BlockQuarryPipe QUARRY_PIPE = new BlockQuarryPipe(Properties.copy(Blocks.IRON_BLOCK));
+	public static final BlockQuarryPipe QUARRY_PIPE = new BlockQuarryPipe(Properties.copy(Blocks.IRON_BLOCK)
+			.strength(2.0F, 8.0F)
+	);
 	
 	public BlockQuarryPipe(Properties props)
 	{
 		super(props);
 		TagAdapter.bind(TagsSQ.Blocks.QUARRY_PIPE, this);
+		BlockHarvestAdapter.bindTool(BlockHarvestAdapter.MineableType.PICKAXE, Tiers.IRON, this);
 	}
 	
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flags)
 	{
 		tooltip.add(Component.translatable("info.squarry.quarry_pipe")
-				.withStyle(ChatFormatting.DARK_GRAY)
+				.withStyle(ChatFormatting.GRAY)
 		);
 	}
 	
@@ -78,7 +84,11 @@ public class BlockQuarryPipe
 		return tfState(state, level, pos);
 	}
 	
-	protected static final VoxelShape SHAPE = box(5, 0, 5, 11, 16, 11);
+	@Override
+	public List<ItemStack> getDrops(BlockState p_60537_, LootParams.Builder b)
+	{
+		return List.of(new ItemStack(this));
+	}
 	
 	@Override
 	public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_)
