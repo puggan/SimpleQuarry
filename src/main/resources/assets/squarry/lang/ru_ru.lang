@@ -3,6 +3,7 @@ itemGroup.squarry=Simple Quarry
 
 block.squarry.fuel_quarry=Топливный карьер
 block.squarry.powered_quarry=Электрический карьер
+block.squarry.quarry_pipe=Quarry Pipe
 
 item.squarry.upgrade_base=Основа апгрейда
 item.squarry.upgrade_silk=Апгрейд. шёлковое касание
@@ -43,3 +44,5 @@ info.squarry.filter.meta.no=Игнорировать урон
 info.squarry.blockstobreak=блоков может сломать
 info.squarry.blocks_broken=Может сломать блоков
 info.squarry.not_fuel=Не топливо!
+
+info.squarry.quarry_pipe=Moves the quarry top-most level below the pipe.

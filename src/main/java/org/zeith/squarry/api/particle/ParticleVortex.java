@@ -33,7 +33,11 @@ public class ParticleVortex
 
 	public AABB getBoundingBox()
 	{
-		if(this.boundingBox == null || this.boundingBox.maxX - this.boundingBox.minX != this.radius * 2.0 || this.boundingBox.maxX - this.radius != this.x || this.boundingBox.maxY - this.radius != this.y || this.boundingBox.maxZ - this.radius != this.z)
+		if(this.boundingBox == null
+		   || this.boundingBox.maxX - this.boundingBox.minX != this.radius * 2.0
+		   || this.boundingBox.maxX - this.radius != this.x
+		   || this.boundingBox.maxY - this.radius != this.y
+		   || this.boundingBox.maxZ - this.radius != this.z)
 			this.rebuildBoundingBox();
 		return this.boundingBox;
 	}

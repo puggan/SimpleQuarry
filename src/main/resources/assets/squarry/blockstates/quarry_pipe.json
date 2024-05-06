@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "up=false,down=false": { "model": "squarry:block/quarry_pipe/single" },
+        "up=true,down=false": { "model": "squarry:block/quarry_pipe/up" },
+        "up=false,down=true": { "model": "squarry:block/quarry_pipe/down" },
+        "up=true,down=true": { "model": "squarry:block/quarry_pipe/both" }
+    }
+}

@@ -20,6 +20,7 @@ public class TagsSQ
 		}
 
 		public static final TagKey<Block> QUARRY_BLACKLIST = sqtag("quarry_blacklist");
+		public static final TagKey<Block> QUARRY_PIPE = sqtag("quarry_pipe");
 
 		private static TagKey<Block> sqtag(String name)
 		{

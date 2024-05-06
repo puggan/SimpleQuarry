@@ -3,6 +3,7 @@ itemGroup.squarry=Simple Quarry
 
 block.squarry.fuel_quarry=Fueled Quarry
 block.squarry.powered_quarry=Powered Quarry
+block.squarry.quarry_pipe=Quarry Pipe
 
 item.squarry.upgrade_base=Base Upgrade
 item.squarry.upgrade_silk=Silk Touch Upgrade
@@ -45,3 +46,5 @@ info.squarry.filter.meta.no=Ignore Damage
 info.squarry.blockstobreak=Blocks To Break
 info.squarry.blocks_broken=Blocks Broken
 info.squarry.not_fuel=Not a Fuel!
+
+info.squarry.quarry_pipe=Moves the quarry top-most level below the pipe.

@@ -4,6 +4,7 @@ import net.minecraft.core.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -30,19 +32,23 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.api.wrench.IWrenchable;
-import org.zeith.hammerlib.annotations.*;
+import org.zeith.hammerlib.annotations.RegistryName;
+import org.zeith.hammerlib.annotations.SimplyRegister;
 import org.zeith.hammerlib.api.forge.BlockAPI;
 import org.zeith.hammerlib.api.inv.SimpleInventory;
 import org.zeith.hammerlib.api.io.NBTSerializable;
 import org.zeith.hammerlib.api.tiles.IContainerTile;
 import org.zeith.hammerlib.net.properties.PropertyInt;
 import org.zeith.hammerlib.tiles.TileSyncableTickable;
+import org.zeith.hammerlib.tiles.tooltip.ITooltipConsumer;
+import org.zeith.hammerlib.tiles.tooltip.ITooltipTile;
 import org.zeith.hammerlib.util.java.DirectStorage;
 import org.zeith.squarry.*;
 import org.zeith.squarry.api.ItemInjector;
 import org.zeith.squarry.api.ItemStackList;
 import org.zeith.squarry.api.energy.QFStorage;
 import org.zeith.squarry.api.particle.ParticleVortex;
+import org.zeith.squarry.blocks.BlockBaseQuarry;
 import org.zeith.squarry.blocks.BlockFuelQuarry;
 import org.zeith.squarry.init.TagsSQ;
 import org.zeith.squarry.inventory.ContainerFuelQuarry;
@@ -55,10 +61,9 @@ import static org.zeith.squarry.SQConstants.*;
 @SimplyRegister
 public class TileFuelQuarry
 		extends TileSyncableTickable
-		implements IContainerTile, IWrenchable
+		implements IContainerTile, IWrenchable, ITooltipTile
 {
 	@RegistryName("fuel_quarry")
-	@OnlyIf(owner = SQConfig.class, member = "enableFuelQuarry")
 	public static final BlockEntityType<TileFuelQuarry> FUEL_QUARRY = BlockAPI.createBlockEntityType(TileFuelQuarry::new, BlockFuelQuarry.FUEL_QUARRY);
 	
 	public static final Map<ResourceKey<Level>, Map<ChunkPos, BlockPos>> QUARRY_MAP = new HashMap<>();
@@ -70,7 +75,13 @@ public class TileFuelQuarry
 	public int tickRate = SQConfig.getFuelQuarryTickRate();
 	
 	@NBTSerializable
-	public int _burnTicks, _totalBurnTicks, y = Integer.MIN_VALUE;
+	public int _burnTicks;
+	
+	@NBTSerializable
+	public int _totalBurnTicks;
+	
+	@NBTSerializable("y")
+	public int _y = Integer.MIN_VALUE;
 	
 	@NBTSerializable
 	public final QFStorage storage = new QFStorage(getQFCapacity());
@@ -93,12 +104,14 @@ public class TileFuelQuarry
 	
 	public final PropertyInt burnTicks = new PropertyInt(DirectStorage.create($ -> _burnTicks = $, () -> _burnTicks));
 	public final PropertyInt totalBurnTicks = new PropertyInt(DirectStorage.create($ -> _totalBurnTicks = $, () -> _totalBurnTicks));
+	public final PropertyInt yLevel = new PropertyInt(DirectStorage.create($ -> _y = $, () -> _y));
 	
 	protected TileFuelQuarry(BlockEntityType<?> type, BlockPos pos, BlockState state)
 	{
 		super(type, pos, state);
 		this.dispatcher.registerProperty("burn_ticks", burnTicks);
 		this.dispatcher.registerProperty("total_burn_ticks", totalBurnTicks);
+		this.dispatcher.registerProperty("y", yLevel);
 	}
 	
 	public void validateQuarry()
@@ -134,13 +147,15 @@ public class TileFuelQuarry
 		{
 			// Quarry has moved
 			SimpleQuarry.LOG.info("Quarry moved from chunk {}, {} -> {}, {} (currently at {}). Reset Y level.", pcp.x, pcp.z, chunkX, chunkZ, worldPosition);
-			y = Integer.MIN_VALUE;
+			yLevel.setInt(Integer.MIN_VALUE);
 		}
 		
 		if(level.isClientSide)
 		{
-			if(boundingBox == null || boundingBox.minY != (double) y)
-				boundingBox = new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, worldPosition.getY(), chunkZ * 16 + 16);
+			int yMax = computeTopmostY();
+			if(boundingBox == null || boundingBox.minY != (double) _y || boundingBox.maxY != yMax + 0.5)
+				boundingBox = new AABB(chunkX * 16, _y, chunkZ * 16, chunkX * 16 + 16, yMax + 0.5, chunkZ * 16 + 16);
+			
 			if(SQConfig.isParticleVortex())
 			{
 				if(vortex == null)
@@ -157,11 +172,11 @@ public class TileFuelQuarry
 			return;
 		}
 		
-		if(y == Integer.MIN_VALUE)
+		if(storage.storedQF > 0.0 && _y == Integer.MIN_VALUE)
 		{
-			y = worldPosition.getY() - 1;
-			boundingBox = new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, y + 1, chunkZ * 16 + 16);
-			sync();
+			yLevel.setInt(computeTopmostY());
+			boundingBox = new AABB(chunkX * 16, _y, chunkZ * 16, chunkX * 16 + 16, _y + 1, chunkZ * 16 + 16);
+			setEnabledState(true);
 		}
 		
 		if(storage.storedQF > 0.0)
@@ -177,14 +192,8 @@ public class TileFuelQuarry
 			return;
 		}
 		
-		if(state0.getValue(BlockStateProperties.ENABLED) && y < -63)
-		{
-			level.setBlock(this.worldPosition, state0.setValue(BlockStateProperties.ENABLED, false), 3);
-//			validate();
-			level.setBlockEntity(this);
-			
-			sync();
-		}
+		if(_y > DimensionType.MIN_Y && _y <= level.getMinBuildHeight())
+			setEnabledState(false);
 		
 		double QFPerBlock = FT.convertTo(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null), QF) / SQConfig.getBlocksPerCoal();
 		QFPerBlock *= getUsageMult();
@@ -221,14 +230,20 @@ public class TileFuelQuarry
 		if(Double.isNaN(qf = storage.getStoredQF(null)) || Double.isInfinite(qf))
 			storage.storedQF = 0.0;
 		
-		if(y > level.getMinBuildHeight() && atTickRate(tickRate) && storage.getStoredQF(null) >= QFPerBlock)
+		tryBreak:
+		if(_y > level.getMinBuildHeight() && atTickRate(tickRate) && storage.getStoredQF(null) >= QFPerBlock)
 		{
+			if(level.getBlockState(new BlockPos(worldPosition.getX(), _y, worldPosition.getZ())).is(TagsSQ.Blocks.QUARRY_PIPE))
+			{
+				yLevel.setInt(_y - 1);
+				break tryBreak;
+			}
+			
 			boolean hasBrokenBlock = false;
 			
-			for(BlockPos pos : BlockPos.betweenClosed(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 15, y, chunkZ * 16 + 15))
+			for(BlockPos pos : BlockPos.betweenClosed(chunkX * 16, _y, chunkZ * 16, chunkX * 16 + 15, _y, chunkZ * 16 + 15))
 			{
 				BlockState state = level.getBlockState(pos);
-				Block b = state.getBlock();
 				
 				if(level.isEmptyBlock(pos) || !canBreak(state, pos))
 					continue;
@@ -243,14 +258,25 @@ public class TileFuelQuarry
 			}
 			
 			if(!hasBrokenBlock)
-				--y;
+				yLevel.setInt(_y - 1);
 		}
 		
 		if(isMining(state0))
-			captureEntityItems(level.getEntitiesOfClass(ItemEntity.class, new AABB(chunkX * 16, y, chunkZ * 16, chunkX * 16 + 16, worldPosition.getY(), chunkZ * 16 + 16)));
+			captureEntityItems(level.getEntitiesOfClass(ItemEntity.class, new AABB(chunkX * 16, _y, chunkZ * 16, chunkX * 16 + 16, worldPosition.getY(), chunkZ * 16 + 16)));
 		
 		tryEject();
 		tickRate = SQConfig.getFuelQuarryTickRate();
+	}
+	
+	public int computeTopmostY()
+	{
+		BlockPos pos = worldPosition.immutable().below();
+		
+		if(level == null) return pos.getY();
+		
+		while(level.getBlockState(pos).is(TagsSQ.Blocks.QUARRY_PIPE)) pos = pos.below();
+		
+		return pos.getY();
 	}
 	
 	public boolean isDone()
@@ -294,7 +320,10 @@ public class TileFuelQuarry
 	
 	public boolean isMining(BlockState state)
 	{
-		return state.getBlock() == getQuarryBlock() && state.getValue(BlockStateProperties.ENABLED) && y > -64 && storage.storedQF > 0;
+		return state.getBlock() == getQuarryBlock()
+			   && state.getValue(BlockStateProperties.ENABLED)
+			   && _y > level.getMinBuildHeight()
+			   && storage.storedQF > 0;
 	}
 	
 	public void breakBlock(BlockPos pos, BlockState state)
@@ -380,8 +409,12 @@ public class TileFuelQuarry
 	public void setEnabledState(boolean enabled)
 	{
 		BlockState s = level.getBlockState(worldPosition);
-		if(s.getBlock() == BlockFuelQuarry.FUEL_QUARRY)
+		if(s.getBlock() instanceof BlockBaseQuarry && !Objects.equals(s.getValue(BlockStateProperties.ENABLED), enabled))
+		{
 			level.setBlockAndUpdate(worldPosition, s.setValue(BlockStateProperties.ENABLED, enabled));
+			level.setBlockEntity(this);
+			sync();
+		}
 	}
 	
 	@Override
@@ -423,5 +456,18 @@ public class TileFuelQuarry
 	public Component getDisplayName()
 	{
 		return getBlockState().getBlock().getName();
+	}
+	
+	@Override
+	public void addTooltip(ITooltipConsumer consumer, Player player)
+	{
+		if(Integer.MIN_VALUE != _y)
+			consumer.addLine(Component.literal("Y: ").append(Integer.toString(_y)));
+	}
+	
+	public void dropEverything(Level world, BlockPos pos)
+	{
+		Containers.dropContents(world, pos, queueItems);
+		Containers.dropContents(world, pos, inventory.items);
 	}
 }

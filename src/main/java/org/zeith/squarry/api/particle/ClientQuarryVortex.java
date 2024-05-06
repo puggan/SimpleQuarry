@@ -9,25 +9,40 @@ public class ClientQuarryVortex
 		extends ClientVortex
 {
 	public final TileFuelQuarry quarry;
-
+	
 	public ClientQuarryVortex(TileFuelQuarry quarry)
 	{
-		super(quarry.getBlockPos().getX() + 0.5, quarry.getBlockPos().getY() + 0.5, quarry.getBlockPos().getZ() + 0.5, 16.0, 1.0, null);
+		super(
+				quarry.getBlockPos().getX() + 0.5,
+				quarry.getBlockPos().getY() + 0.5,
+				quarry.getBlockPos().getZ() + 0.5,
+				16.0,
+				1.0,
+				null
+		);
 		this.quarry = quarry;
 	}
-
+	
 	AABB below;
-
+	
 	@Override
 	public void update()
 	{
-		below = new AABB(quarry.getBlockPos().below()).move(0, 0.8, 0);
-		x = quarry.getBlockPos().getX() + 0.5;
-		y = quarry.getBlockPos().getY();
-		z = quarry.getBlockPos().getZ() + 0.5;
+		var qp = quarry.getBlockPos();
+		int qY = quarry.computeTopmostY() + 1;
+		
+		below = new AABB(
+				qp.getX(), qY - 1, qp.getZ(),
+				qp.getX() + 1, qY, qp.getZ() + 1
+		).move(0, 1, 0);
+		
+		x = qp.getX() + 0.5;
+		y = qY;
+		z = qp.getZ() + 0.5;
+		
 		super.update();
 	}
-
+	
 	@Override
 	protected void processParticle(Particle p)
 	{
@@ -47,7 +62,7 @@ public class ClientQuarryVortex
 			p.age = Math.min(p.age + 8, p.getLifetime() - 1);
 		}
 	}
-
+	
 	@Override
 	public AABB getBoundingBox()
 	{

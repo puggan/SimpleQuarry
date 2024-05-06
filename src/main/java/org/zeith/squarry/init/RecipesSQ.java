@@ -10,8 +10,7 @@ import org.zeith.hammerlib.annotations.ProvideRecipes;
 import org.zeith.hammerlib.api.IRecipeProvider;
 import org.zeith.hammerlib.event.recipe.RegisterRecipesEvent;
 import org.zeith.squarry.SQConfig;
-import org.zeith.squarry.blocks.BlockFuelQuarry;
-import org.zeith.squarry.blocks.BlockPoweredQuarry;
+import org.zeith.squarry.blocks.*;
 import org.zeith.squarry.util.PreciseIngredient;
 
 import java.util.Map;
@@ -46,6 +45,14 @@ public class RecipesSQ
 				.map('f', Items.FURNACE)
 				.map('g', Items.CLOCK)
 				.map('d', Items.DIAMOND_PICKAXE)
+				.register();
+		
+		event.shaped()
+				.result(new ItemStack(BlockQuarryPipe.QUARRY_PIPE, 12))
+				.shape("ibi", "iui", "ibi")
+				.map('i', Tags.Items.INGOTS_IRON)
+				.map('b', Items.IRON_BARS)
+				.map('u', ItemsSQ.UPGRADE_BASE)
 				.register();
 
 		if(SQConfig.isPoweredQuarry())

@@ -1,0 +1,6 @@
+{
+	"parent": "squarry:block/quarry_pipe/base",
+	"textures": {
+		"all": "squarry:block/quarry_pipe/down"
+	}
+}

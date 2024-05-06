@@ -2,10 +2,12 @@ package org.zeith.squarry.blocks.entity;
 
 import net.minecraft.core.*;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,7 +16,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
-import org.zeith.hammerlib.annotations.*;
+import org.zeith.hammerlib.annotations.RegistryName;
+import org.zeith.hammerlib.annotations.SimplyRegister;
 import org.zeith.hammerlib.api.forge.BlockAPI;
 import org.zeith.hammerlib.api.inv.SimpleInventory;
 import org.zeith.hammerlib.api.io.NBTSerializable;
@@ -31,7 +34,6 @@ public class TilePoweredQuarry
 		implements IEnergyStorage
 {
 	@RegistryName("powered_quarry")
-	@OnlyIf(owner = SQConfig.class, member = "enablePoweredQuarry")
 	public static final BlockEntityType<TileFuelQuarry> POWERED_QUARRY = BlockAPI.createBlockEntityType(TilePoweredQuarry::new, BlockPoweredQuarry.POWERED_QUARRY);
 	
 	@NBTSerializable
@@ -153,6 +155,7 @@ public class TilePoweredQuarry
 	@Override
 	public AbstractContainerMenu openContainer(Player player, int windowId)
 	{
+		if(!SQConfig.isPoweredQuarry()) return null;
 		return new ContainerPoweredQuarry(player, windowId, this);
 	}
 	
@@ -237,5 +240,12 @@ public class TilePoweredQuarry
 	{
 		if(cap == ForgeCapabilities.ENERGY) return this.energyStorageTile.cast();
 		return super.getCapability(cap, side);
+	}
+	
+	@Override
+	public void dropEverything(Level world, BlockPos pos)
+	{
+		super.dropEverything(world, pos);
+		Containers.dropContents(world, pos, invUpgrades);
 	}
 }

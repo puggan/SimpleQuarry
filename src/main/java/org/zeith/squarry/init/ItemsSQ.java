@@ -12,7 +12,7 @@ import org.zeith.squarry.items.*;
 public class ItemsSQ
 {
 	@RegistryName("upgrade_base")
-	public static final Item UPGRADE_BASE = new ItemBaseSQ();
+	public static final Item UPGRADE_BASE = new ItemMaterialSQ();
 	
 	@RegistryName("upgrade_silk")
 	public static final ItemUpgrade UPGRADE_SILK = new ItemSilkUpgrade();
