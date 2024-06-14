@@ -2,7 +2,7 @@ package org.zeith.squarry.inventory.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 public class SlotFuelAndBattery
 		extends SlotFurnaceFuel
@@ -15,6 +15,7 @@ public class SlotFuelAndBattery
 	@Override
 	public boolean mayPlace(ItemStack stack)
 	{
-		return stack.getCapability(ForgeCapabilities.ENERGY).isPresent() || super.mayPlace(stack);
+		var energyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+		return (energyStorage != null && energyStorage.getEnergyStored() > 0 && energyStorage.canExtract()) || super.mayPlace(stack);
 	}
 }

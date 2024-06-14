@@ -1,12 +1,15 @@
 package org.zeith.squarry.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.util.Cast;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.hammerlib.annotations.RegistryName;
 import org.zeith.hammerlib.annotations.SimplyRegister;
+import org.zeith.hammerlib.api.registrars.Registrar;
 import org.zeith.squarry.blocks.entity.TileFuelQuarry;
 
 @SimplyRegister
@@ -20,9 +23,18 @@ public class BlockFuelQuarry
 			.requiresCorrectToolForDrops()
 	);
 	
+	@RegistryName("fuel_quarry")
+	public static final Registrar<MapCodec<? extends Block>> FUEL_QUARRY_CODEC = Registrar.blockType(simpleCodec(BlockFuelQuarry::new));
+	
 	protected BlockFuelQuarry(Properties props)
 	{
 		super(props);
+	}
+	
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec()
+	{
+		return Cast.cast(FUEL_QUARRY_CODEC.get());
 	}
 	
 	@Nullable

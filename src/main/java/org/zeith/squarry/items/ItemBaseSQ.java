@@ -3,7 +3,6 @@ package org.zeith.squarry.items;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.squarry.SimpleQuarry;
 
@@ -24,7 +23,7 @@ public class ItemBaseSQ
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flags)
+	public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext level, List<Component> tooltip, TooltipFlag flags)
 	{
 		for(int i = 0; ; ++i)
 		{

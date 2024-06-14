@@ -6,16 +6,13 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import org.zeith.hammerlib.annotations.RegistryName;
 import org.zeith.hammerlib.annotations.SimplyRegister;
 import org.zeith.hammerlib.api.forge.BlockAPI;
@@ -26,15 +23,13 @@ import org.zeith.squarry.blocks.BlockPoweredQuarry;
 import org.zeith.squarry.inventory.ContainerPoweredQuarry;
 import org.zeith.squarry.items.ItemUpgrade;
 
-import java.util.Map;
-
 @SimplyRegister
 public class TilePoweredQuarry
 		extends TileFuelQuarry
 		implements IEnergyStorage
 {
 	@RegistryName("powered_quarry")
-	public static final BlockEntityType<TileFuelQuarry> POWERED_QUARRY = BlockAPI.createBlockEntityType(TilePoweredQuarry::new, BlockPoweredQuarry.POWERED_QUARRY);
+	public static final BlockEntityType<TilePoweredQuarry> POWERED_QUARRY = BlockAPI.createBlockEntityType(TilePoweredQuarry::new, BlockPoweredQuarry.POWERED_QUARRY);
 	
 	@NBTSerializable
 	public final SimpleInventory invUpgrades = new SimpleInventory(5);
@@ -92,15 +87,15 @@ public class TilePoweredQuarry
 		
 		ItemStack stack = inventory.getStackInSlot(0);
 		
+		energyItem:
 		if(!stack.isEmpty())
 		{
-			stack.getCapability(ForgeCapabilities.ENERGY).ifPresent(pc ->
-			{
-				int canExtract = pc.extractEnergy(pc.getEnergyStored(), true);
-				canExtract = Math.min(receiveEnergy(canExtract, true), canExtract);
-				pc.extractEnergy(canExtract, false);
-				receiveEnergy(canExtract, false);
-			});
+			var pc = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+			if(pc == null) break energyItem;
+			int canExtract = pc.extractEnergy(pc.getEnergyStored(), true);
+			canExtract = Math.min(receiveEnergy(canExtract, true), canExtract);
+			pc.extractEnergy(canExtract, false);
+			receiveEnergy(canExtract, false);
 		}
 		
 		for(int i = 0; i < invUpgrades.getContainerSize(); ++i)
@@ -166,7 +161,7 @@ public class TilePoweredQuarry
 	}
 	
 	@Override
-	public void addToolEnchantments(Map<Enchantment, Integer> enchantmentMap)
+	public void addToolEnchantments(ItemEnchantments.Mutable enchantmentMap)
 	{
 		for(int i = 0; i < invUpgrades.getContainerSize(); ++i)
 		{
@@ -177,16 +172,16 @@ public class TilePoweredQuarry
 	}
 	
 	@Override
-	public void readNBT(CompoundTag nbt)
+	public void readNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
-		super.readNBT(nbt);
+		super.readNBT(nbt, provider);
 		additionalTags = nbt.getCompound("AdditionalTags");
 	}
 	
 	@Override
-	public CompoundTag writeNBT(CompoundTag nbt)
+	public CompoundTag writeNBT(CompoundTag nbt, HolderLookup.Provider provider)
 	{
-		nbt = super.writeNBT(nbt);
+		nbt = super.writeNBT(nbt, provider);
 		nbt.put("AdditionalTags", additionalTags.copy());
 		return nbt;
 	}
@@ -231,15 +226,6 @@ public class TilePoweredQuarry
 	public boolean canReceive()
 	{
 		return true;
-	}
-	
-	final LazyOptional<IEnergyStorage> energyStorageTile = LazyOptional.of(() -> this);
-	
-	@Override
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, Direction side)
-	{
-		if(cap == ForgeCapabilities.ENERGY) return this.energyStorageTile.cast();
-		return super.getCapability(cap, side);
 	}
 	
 	@Override

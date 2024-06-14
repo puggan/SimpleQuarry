@@ -11,8 +11,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -29,7 +29,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.Nullable;
 import org.zeith.api.wrench.IWrenchable;
 import org.zeith.hammerlib.annotations.RegistryName;
@@ -195,7 +194,7 @@ public class TileFuelQuarry
 		if(_y > DimensionType.MIN_Y && _y <= level.getMinBuildHeight())
 			setEnabledState(false);
 		
-		double QFPerBlock = FT.convertTo(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null), QF) / SQConfig.getBlocksPerCoal();
+		double QFPerBlock = FT.convertTo(SQCommonProxy.COAL.getBurnTime(null), QF) / SQConfig.getBlocksPerCoal();
 		QFPerBlock *= getUsageMult();
 		
 		int bt;
@@ -204,7 +203,7 @@ public class TileFuelQuarry
 		   && atTickRate(20)
 		   && _burnTicks < 1
 		   && !(stack = inventory.getStackInSlot(0)).isEmpty()
-		   && (bt = ForgeHooks.getBurnTime(stack, null)) > 0
+		   && (bt = stack.getBurnTime(null)) > 0
 		   && storage.consumeQF(null, FT.convertTo(1, QF), true) == FT.convertTo(1, QF))
 		{
 			burnTicks.setInt(burnTicks.getInt() + bt);
@@ -292,7 +291,7 @@ public class TileFuelQuarry
 		return 1;
 	}
 	
-	public void addToolEnchantments(Map<Enchantment, Integer> enchantmentMap)
+	public void addToolEnchantments(ItemEnchantments.Mutable enchantmentMap)
 	{
 	}
 	
@@ -302,9 +301,9 @@ public class TileFuelQuarry
 		if(level instanceof ServerLevel sl)
 		{
 			ItemStack tool = new ItemStack(Items.DIAMOND_PICKAXE);
-			Map<Enchantment, Integer> enchMap = new HashMap<>();
+			var enchMap = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
 			addToolEnchantments(enchMap);
-			EnchantmentHelper.setEnchantments(enchMap, tool);
+			EnchantmentHelper.setEnchantments(tool, enchMap.toImmutable());
 			
 			LootParams.Builder bl = new LootParams.Builder(sl)
 					.withParameter(LootContextParams.BLOCK_STATE, state)
@@ -371,8 +370,7 @@ public class TileFuelQuarry
 			
 			for(var face : Direction.values())
 			{
-				BlockEntity tile = level.getBlockEntity(worldPosition.relative(face));
-				stack = ItemInjector.inject(stack, tile, face.getOpposite());
+				stack = ItemInjector.inject(stack, level, worldPosition.relative(face), face.getOpposite());
 				if(stack.isEmpty())
 					break;
 			}
@@ -469,5 +467,10 @@ public class TileFuelQuarry
 	{
 		Containers.dropContents(world, pos, queueItems);
 		Containers.dropContents(world, pos, inventory.items);
+	}
+	
+	public RegistryAccess registryAccess()
+	{
+		return level.registryAccess();
 	}
 }

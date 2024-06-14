@@ -7,10 +7,10 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeHooks;
 import org.joml.Matrix4f;
 import org.zeith.hammerlib.client.screen.ScreenWTFMojang;
 import org.zeith.hammerlib.client.utils.FXUtils;
@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 public class ScreenPoweredQuarry
 		extends ScreenWTFMojang<ContainerPoweredQuarry>
 {
+	public static final ResourceLocation POWERED_QUARRY_TEXTURE = SimpleQuarry.id("textures/gui/powered_quarry.png");
 	public TilePoweredQuarry tile;
 	
 	public ScreenPoweredQuarry(ContainerPoweredQuarry container, Inventory inv, Component label)
@@ -39,11 +40,9 @@ public class ScreenPoweredQuarry
 	@Override
 	protected void renderBackground(GuiGraphics gfx, float partialTime, int mouseX, int mouseY)
 	{
-		var pose = gfx.pose();
+		gfx.blit(POWERED_QUARRY_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 		
-		FXUtils.bindTexture(SQConstants.MOD_ID, "textures/gui/powered_quarry.png");
-		RenderUtils.drawTexturedModalRect(gfx, leftPos, topPos, 0, 0, imageWidth, imageHeight);
-		
+		FXUtils.bindTexture(POWERED_QUARRY_TEXTURE);
 		RenderUtils.drawTexturedModalRect(gfx, leftPos + 26.5F, topPos + 34, imageWidth, 14, 13, 13);
 		
 		if(tile.totalBurnTicks.getInt() != 0)
@@ -66,8 +65,6 @@ public class ScreenPoweredQuarry
 	@Override
 	protected boolean renderForeground(GuiGraphics gfx, int mx, int my)
 	{
-		var pose = gfx.pose();
-		
 		if(mx - leftPos >= 6 && my - topPos >= 7 && mx - leftPos <= 19 && my - topPos <= 73)
 		{
 			RenderSystem.enableBlend();
@@ -77,7 +74,7 @@ public class ScreenPoweredQuarry
 			
 			ItemStack mouse = menu.getCarried();
 			if(mouse.isEmpty())
-				gfx.renderTooltip(font, Component.literal(df.format(Math.floor(tile.storage.getStoredQF(null) / (UniversalConverter.FT_QF(ForgeHooks.getBurnTime(SQCommonProxy.COAL, null)) / SQConfig.getBlocksPerCoal()))) + " " + I18n.get("info.squarry.blockstobreak")), 16, 48);
+				gfx.renderTooltip(font, Component.literal(df.format(Math.floor(tile.storage.getStoredQF(null) / (UniversalConverter.FT_QF(SQCommonProxy.COAL.getBurnTime(null)) / SQConfig.getBlocksPerCoal()))) + " " + I18n.get("info.squarry.blockstobreak")), 16, 48);
 		}
 		
 		return true;
@@ -107,9 +104,9 @@ public class ScreenPoweredQuarry
 		float f7 = (float) FastColor.ARGB32.blue(rgb2) / 255.0F;
 		
 		Matrix4f matrix4f = gfx.pose().last().pose();
-		b.vertex(matrix4f, x1, y1, z).color(f1, f2, f3, f).endVertex();
-		b.vertex(matrix4f, x1, y2, z).color(f5, f6, f7, f4).endVertex();
-		b.vertex(matrix4f, x2, y2, z).color(f5, f6, f7, f4).endVertex();
-		b.vertex(matrix4f, x2, y1, z).color(f1, f2, f3, f).endVertex();
+		b.addVertex(matrix4f, x1, y1, z).setColor(f1, f2, f3, f);
+		b.addVertex(matrix4f, x1, y2, z).setColor(f5, f6, f7, f4);
+		b.addVertex(matrix4f, x2, y2, z).setColor(f5, f6, f7, f4);
+		b.addVertex(matrix4f, x2, y1, z).setColor(f1, f2, f3, f);
 	}
 }

@@ -1,7 +1,9 @@
 package org.zeith.squarry.api.particle;
 
+import lombok.Getter;
 import net.minecraft.world.phys.AABB;
 
+@Getter
 public class ParticleVortex
 {
 	protected double x;
@@ -40,25 +42,5 @@ public class ParticleVortex
 		   || this.boundingBox.maxZ - this.radius != this.z)
 			this.rebuildBoundingBox();
 		return this.boundingBox;
-	}
-
-	public double getX()
-	{
-		return this.x;
-	}
-
-	public double getY()
-	{
-		return this.y;
-	}
-
-	public double getZ()
-	{
-		return this.z;
-	}
-
-	public double getVortexStrength()
-	{
-		return vortexStrength;
 	}
 }

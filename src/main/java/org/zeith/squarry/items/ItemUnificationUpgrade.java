@@ -10,9 +10,9 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import org.zeith.squarry.SQConfig;
 import org.zeith.squarry.SimpleQuarry;
 import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
@@ -20,7 +20,7 @@ import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ItemUnificationUpgrade
 		extends ItemUpgrade
 {

@@ -3,7 +3,7 @@ package org.zeith.squarry.items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.zeith.hammerlib.api.fml.IRegisterListener;
 import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
 
@@ -38,7 +38,7 @@ public abstract class ItemUpgrade
 		quarryUseMultiplierClient = quarryUseMultiplierServer = quarryUseMultiplier;
 	}
 	
-	public void addEnchantments(TilePoweredQuarry quarry, Map<Enchantment, Integer> enchantmentMap)
+	public void addEnchantments(TilePoweredQuarry quarry, ItemEnchantments.Mutable enchantmentMap)
 	{
 	}
 	

@@ -1,4 +1,13 @@
 # Mod Info
+mod_version=21.0.1
+build_candidate=false
+
+# Mod dependencies (jei is not a requirement, but HammerLib is)
+hl_version=21.0.2
+# jei_version=19.0.0.1
+# hammeranims_version=21.0.33
+
+# Persistent mod info
 mod_id=squarry
 archive_name=SimpleQuarry
 mod_name=Simple Quarry
@@ -6,31 +15,29 @@ mod_license=All Rights Reserved
 mod_authors=Zeitheron
 mod_description=Simple mod that adds a simple quarry. Or two.
 issue_tracker_url=https://github.com/dragon-forge/SimpleQuarry/issues
-
-mod_version=20.1.5
-build_candidate=false
+mod_credits=None
 
 # Maven Info
 maven_group=org.zeith.simplequarry
-hl_version=20.1.29
-maven_url=file:///SERVER//Maven
+maven_url=file:///R:/
 
 # MC Info
-mc_version=1.20.1
-mc_range=[1.20.1,1.21)
-forge_version=47.0.1
-forge_range=[47,)
+mc_version=1.21
+mc_range=[1.21,1.22)
+forge_version=21.0.0-beta
+forge_range=[21.0.0-beta,)
+javafml_range=[2.0,)
 mc_user=Zeitheron,63fa4c485b5640809727d5d59663e603
 
 # Misc Info
-java=17
+java=21
 
 # Project ID on CurseForge
 cf_project=247393
 modrinth_project=s3lgCbLg
 
 # alpha, beta, release
-release_type=release
+release_type=beta
 
 # List of mods separated by ;
 # If a specific mod for one platform is needed, @m: or @c: prefixes are used.

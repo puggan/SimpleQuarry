@@ -1,8 +1,8 @@
 package org.zeith.squarry;
 
 import lombok.Getter;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.Tags;
 import org.zeith.hammerlib.util.configured.ConfiguredLib;
 import org.zeith.hammerlib.util.configured.data.DecimalValueRange;
 import org.zeith.hammerlib.util.configured.data.IntValueRange;

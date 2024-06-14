@@ -1,11 +1,9 @@
 package org.zeith.squarry.items;
 
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.enchantment.*;
 import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
 import org.zeith.squarry.init.ItemsSQ;
-
-import java.util.Map;
 
 public class ItemFortuneUpgrade
 		extends ItemUpgrade
@@ -24,7 +22,7 @@ public class ItemFortuneUpgrade
 	}
 
 	@Override
-	public void addEnchantments(TilePoweredQuarry quarry, Map<Enchantment, Integer> enchantmentMap)
+	public void addEnchantments(TilePoweredQuarry quarry, ItemEnchantments.Mutable enchantmentMap)
 	{
 		int fortune = 0;
 		if(ItemUpgrade.hasUpgrade(quarry, ItemsSQ.UPGRADE_FORTUNE1))
@@ -33,7 +31,11 @@ public class ItemFortuneUpgrade
 			++fortune;
 		if(ItemUpgrade.hasUpgrade(quarry, ItemsSQ.UPGRADE_FORTUNE3) && fortune == 2)
 			++fortune;
-		enchantmentMap.put(Enchantments.BLOCK_FORTUNE, fortune);
+		
+		enchantmentMap.set(
+				quarry.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.FORTUNE),
+				fortune
+		);
 	}
 
 	@Override

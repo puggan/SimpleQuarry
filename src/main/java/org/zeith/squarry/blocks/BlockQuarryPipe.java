@@ -37,7 +37,7 @@ public class BlockQuarryPipe
 	protected static final VoxelShape SHAPE = box(5, 0, 5, 11, 16, 11);
 	
 	@RegistryName("quarry_pipe")
-	public static final BlockQuarryPipe QUARRY_PIPE = new BlockQuarryPipe(Properties.copy(Blocks.IRON_BLOCK)
+	public static final BlockQuarryPipe QUARRY_PIPE = new BlockQuarryPipe(Properties.ofFullCopy(Blocks.IRON_BLOCK)
 			.strength(2.0F, 8.0F)
 	);
 	
@@ -49,7 +49,7 @@ public class BlockQuarryPipe
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flags)
+	public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext ctx, List<Component> tooltip, TooltipFlag flags)
 	{
 		tooltip.add(Component.translatable("info.squarry.quarry_pipe")
 				.withStyle(ChatFormatting.GRAY)

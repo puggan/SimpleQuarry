@@ -1,14 +1,19 @@
 package org.zeith.squarry.api.energy;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.util.INBTSerializable;
+import org.zeith.hammerlib.api.io.IAutoNBTSerializable;
+import org.zeith.hammerlib.api.io.NBTSerializable;
 
 public class QFStorage
-		implements IQFConsumer, IQFProducer, INBTSerializable<CompoundTag>
+		implements IQFConsumer, IQFProducer, IAutoNBTSerializable
 {
+	@NBTSerializable("QFStored")
 	public double storedQF = 0.0;
-	public double capacity = 1.0;
+	
+	@NBTSerializable("QFCapacity")
+	public double capacity;
 
 	public QFStorage(double capacity)
 	{
@@ -70,25 +75,21 @@ public class QFStorage
 			this.storedQF += accepted;
 		return accepted;
 	}
-
+	
 	@Override
-	public CompoundTag serializeNBT()
+	public CompoundTag serializeNBT(HolderLookup.Provider provider)
 	{
-		CompoundTag nbt = new CompoundTag();
 		fixPower();
-		nbt.putDouble("QFStored", this.storedQF);
-		nbt.putDouble("QFCapacity", this.capacity);
-		return nbt;
+		return IAutoNBTSerializable.super.serializeNBT(provider);
 	}
-
+	
 	@Override
-	public void deserializeNBT(CompoundTag nbt)
+	public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
 	{
-		this.storedQF = nbt.getDouble("QFStored");
-		this.capacity = nbt.getDouble("QFCapacity");
+		IAutoNBTSerializable.super.deserializeNBT(provider, nbt);
 		fixPower();
 	}
-
+	
 	public static QFStorage readQFStorage(CompoundTag nbt)
 	{
 		return new QFStorage(nbt.getDouble("QFCapacity"), nbt.getDouble("QFStored"));

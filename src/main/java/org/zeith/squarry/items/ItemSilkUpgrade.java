@@ -1,12 +1,11 @@
 package org.zeith.squarry.items;
 
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.zeith.hammerlib.annotations.SimplyRegister;
 import org.zeith.squarry.blocks.entity.TilePoweredQuarry;
 import org.zeith.squarry.init.ItemsSQ;
-
-import java.util.Map;
 
 @SimplyRegister
 public class ItemSilkUpgrade
@@ -20,9 +19,12 @@ public class ItemSilkUpgrade
 	}
 
 	@Override
-	public void addEnchantments(TilePoweredQuarry quarry, Map<Enchantment, Integer> enchantmentMap)
+	public void addEnchantments(TilePoweredQuarry quarry, ItemEnchantments.Mutable enchantmentMap)
 	{
-		enchantmentMap.put(Enchantments.SILK_TOUCH, 1);
+		enchantmentMap.set(
+				quarry.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.SILK_TOUCH),
+				1
+		);
 	}
 
 	@Override
