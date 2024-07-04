@@ -3,8 +3,8 @@ mod_version=21.0.1
 build_candidate=false
 
 # Mod dependencies (jei is not a requirement, but HammerLib is)
-hl_version=21.0.2
-# jei_version=19.0.0.1
+hl_version=21.0.12
+jei_version=19.0.0.9
 # hammeranims_version=21.0.33
 
 # Persistent mod info
@@ -22,22 +22,17 @@ maven_group=org.zeith.simplequarry
 maven_url=file:///R:/
 
 # MC Info
-mc_version=1.21
-mc_range=[1.21,1.22)
-forge_version=21.0.0-beta
-forge_range=[21.0.0-beta,)
-javafml_range=[2.0,)
 mc_user=Zeitheron,63fa4c485b5640809727d5d59663e603
-
-# Misc Info
-java=21
 
 # Project ID on CurseForge
 cf_project=247393
 modrinth_project=s3lgCbLg
 
 # alpha, beta, release
-release_type=beta
+release_type=release
+
+# Keeping track of latest git commit for changelog generation!
+last_git_commit=2ec9b5b5c95b882a49127d20a5eb499249671c4d
 
 # List of mods separated by ;
 # If a specific mod for one platform is needed, @m: or @c: prefixes are used.

@@ -24,7 +24,7 @@ public class BlockPoweredQuarry
 	);
 	
 	@RegistryName("powered_quarry")
-	public static final Registrar<MapCodec<? extends Block>> FUEL_QUARRY_CODEC = Registrar.blockType(simpleCodec(BlockPoweredQuarry::new));
+	public static final Registrar<MapCodec<BlockPoweredQuarry>> FUEL_QUARRY_CODEC = Registrar.blockType(simpleCodec(BlockPoweredQuarry::new));
 	
 	protected BlockPoweredQuarry(Properties props)
 	{
