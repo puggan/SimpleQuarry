@@ -27,7 +27,7 @@ public record FilterDataComponent(
 					Codec.BOOL.fieldOf("tags").forGetter(FilterDataComponent::useTags),
 					Codec.BOOL.fieldOf("damage").forGetter(FilterDataComponent::useDamage),
 					Codec.BOOL.fieldOf("components").forGetter(FilterDataComponent::ignoreComponents),
-					ItemStack.SINGLE_ITEM_CODEC.listOf().fieldOf("filter").forGetter(FilterDataComponent::filter),
+					ItemStack.OPTIONAL_CODEC.listOf().fieldOf("filter").forGetter(FilterDataComponent::filter),
 					UUIDUtil.CODEC.fieldOf("id").forGetter(FilterDataComponent::filterId)
 			).apply(inst, FilterDataComponent::new)
 	);
@@ -37,7 +37,7 @@ public record FilterDataComponent(
 			ByteBufCodecs.BOOL, FilterDataComponent::useTags,
 			ByteBufCodecs.BOOL, FilterDataComponent::useDamage,
 			ByteBufCodecs.BOOL, FilterDataComponent::ignoreComponents,
-			ItemStack.LIST_STREAM_CODEC, FilterDataComponent::filter,
+			ItemStack.OPTIONAL_LIST_STREAM_CODEC, FilterDataComponent::filter,
 			UUIDUtil.STREAM_CODEC, FilterDataComponent::filterId,
 			FilterDataComponent::new
 	);
