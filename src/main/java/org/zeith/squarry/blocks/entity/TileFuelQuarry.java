@@ -209,7 +209,11 @@ public class TileFuelQuarry
 			burnTicks.setInt(burnTicks.getInt() + bt);
 			
 			totalBurnTicks.setInt(burnTicks.getInt());
-			stack.shrink(1);
+			if (stack.getCount() === 1 && stack.hasContainerItem()) {
+				inventory.setInventorySlotContents(0, stack.getContainerItem());
+			} else {
+				stack.shrink(1);
+			}
 			sync();
 		}
 		
